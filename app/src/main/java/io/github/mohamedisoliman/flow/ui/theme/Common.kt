@@ -16,7 +16,7 @@ fun CardSurface(
         modifier = modifier,
         color = MaterialTheme.colors.background,
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp
+        elevation = 0.dp
     ) {
         content()
     }
