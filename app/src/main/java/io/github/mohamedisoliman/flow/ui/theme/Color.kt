@@ -19,4 +19,5 @@ object Figma {
     val Orange = Color(0xFFFFA656)
     val DarkBlack = Color(0xFF18152C)
     val Background = Color(0xFFFAFAFF)
+    val DarkBackground = Color(0xFF292639)
 }

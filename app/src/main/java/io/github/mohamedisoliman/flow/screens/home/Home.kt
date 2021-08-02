@@ -1,15 +1,21 @@
 package io.github.mohamedisoliman.flow.screens.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,6 +23,40 @@ import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.ui.theme.CardSurface
 import io.github.mohamedisoliman.flow.ui.theme.Figma
+
+
+val tasks = listOf(
+    Task(
+        name = "100x Sit-Up",
+        project = Project("Rasion Project", Figma.Purple),
+        tags = listOf(TaskTag("Work", Figma.DarkBlack), TaskTag("Rasion Project", Figma.Purple)),
+        time = "00:42:21"
+    ),
+    Task(
+        name = "UI Design",
+        project = Project("Rasion Project", Figma.Purple),
+        tags = listOf(TaskTag("Personal", Figma.Black), TaskTag("Rasion Project", Figma.Blue)),
+        time = "00:42:21"
+    ),
+    Task(
+        name = "100x Sit-Up",
+        project = Project("Rasion Project", Figma.Purple),
+        tags = listOf(TaskTag("Work", Figma.Green), TaskTag("Rasion Project", Figma.Orange)),
+        time = "00:42:21"
+    ),
+    Task(
+        name = "Learn HTML & CSS",
+        project = Project("Rasion Project", Figma.Purple),
+        tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
+        time = "00:42:21"
+    ),
+    Task(
+        name = "Read 10 pages of book",
+        project = Project("Rasion Project", Figma.Purple),
+        tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
+        time = "00:42:21"
+    )
+)
 
 @Preview(showBackground = true)
 @Composable
@@ -27,16 +67,33 @@ fun PreviewHomeScreen() {
 @Composable
 fun Home() {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(all = 16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(all = 16.dp)
     ) {
-        HomeTopBar(modifier = Modifier.padding(bottom = 24.dp)) {}
-        CurrentTaskCard()
-        TodayTasks(modifier = Modifier.padding(top = 32.dp)) {}
+        items(1) {
+            HomeTopBar(modifier = Modifier.padding(bottom = 24.dp)) {}
+            CurrentTaskCard()
+        }
+        item {
+            SectionHead(
+                modifier =
+                Modifier.padding(top = 24.dp),
+                title = "Today",
+                endItem = {
+                    Text(modifier = Modifier.clickable(onClick = { }),
+                        text = "See All", style = MaterialTheme.typography.subtitle1)
+                }
+            )
+        }
+
+        tasks.forEach { task ->
+            item {
+                TaskCard(task)
+            }
+        }
     }
 
 }
@@ -54,92 +111,95 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun TodayTasks(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .then(modifier)
-    ) {
-        SectionHead(
-            modifier =
-            Modifier.padding(bottom = 24.dp),
-            title = "Today",
-            endItem = {
-                Text(modifier = Modifier.clickable(onClick = onClick),
-                    text = "See All", style = MaterialTheme.typography.subtitle1)
-            }
-        )
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(5) {
-                TaskCard(task = Task(
-                    taskName = "UI Design",
-                    taskTags = listOf(TaskTag("Work", Figma.Pink),
-                        TaskTag("Rasion Project", Figma.Purple)),
-                    taskTimer = "00:42:21"
-                ))
-            }
-        }
-    }
-}
-
-@Composable
 fun TaskCard(task: Task = Task()) {
-    CardSurface(modifier = Modifier.fillMaxSize()) {
+    CardSurface(
+        modifier = Modifier
+            .height(95.dp)
+            .fillMaxWidth()
+    ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.arrow),
-                contentDescription = ""
-            )
+            Row(horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically) {
+                ProjectImage(modifier = Modifier.padding(end = 16.dp), task)
 
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = task.taskName)
-                Tags()
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .wrapContentWidth(),
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = task.name, style = MaterialTheme.typography.subtitle2)
+                    TagsRow(tags = task.tags)
+                }
             }
+
+            StartTask(task = task)
         }
     }
 }
 
 @Composable
-private fun StartTask(task: Task) {
+private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
+    Image(
+        painter = painterResource(R.drawable.desktop),
+        contentDescription = "avatar",
+        contentScale = ContentScale.Inside,
+        modifier = modifier
+            .size(48.dp)
+            .clip(CircleShape)
+            .background(color = task.project.color)
+    )
+}
+
+@Composable
+private fun StartTask(
+    modifier: Modifier = Modifier,
+    task: Task,
+    onClick: () -> Unit = {},
+) {
     Column(
-        modifier = Modifier.wrapContentHeight(),
+        modifier = modifier.wrapContentHeight(),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = task.taskTimer)
-        IconButton(onClick = { /*TODO*/ }) {
+        Text(text = task.time)
+        IconButton(onClick = onClick) {
             Icon(painter = painterResource(id = R.drawable.play), contentDescription = "")
         }
     }
 }
 
 @Composable
-private fun Tags(tags: List<TaskTag> = emptyList()) {
-    Row(modifier = Modifier.wrapContentWidth()) {
-        tags.take(2).forEach {
-            TagView(it.tagName, it.tagColor)
+private fun TagsRow(
+    modifier: Modifier = Modifier,
+    tags: List<TaskTag> = emptyList(),
+) {
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        tags.forEach { tag ->
+            item {
+                TagView(tagName = tag.name, tagColor = tag.color)
+            }
         }
     }
 }
 
 @Composable
 fun TagView(tagName: String, tagColor: Color) {
-    Surface(color = tagColor.copy(alpha = 20F), shape = RoundedCornerShape(4.dp)) {
-        Text(text = tagName, style = MaterialTheme.typography.caption.copy(color = tagColor))
+    Surface(color = tagColor.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
+        Text(modifier = Modifier.padding(8.dp),
+            text = tagName,
+            style = MaterialTheme.typography.caption.copy(color = tagColor, fontSize = 12.sp)
+        )
     }
 }
 
@@ -232,12 +292,18 @@ fun ProjectView(
 }
 
 data class Task(
-    val taskName: String = "",
-    val taskTimer: String = "",
-    val taskTags: List<TaskTag> = emptyList(),
+    val name: String = "",
+    val time: String = "",
+    val project: Project = Project(),
+    val tags: List<TaskTag> = emptyList(),
 )
 
 data class TaskTag(
-    val tagName: String = "",
-    val tagColor: Color = Color.Transparent,
+    val name: String = "",
+    val color: Color = Color.Transparent,
+)
+
+data class Project(
+    val name: String = "",
+    val color: Color = Color.Transparent,
 )

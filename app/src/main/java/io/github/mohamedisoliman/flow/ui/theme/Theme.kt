@@ -10,7 +10,15 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = Teal200,
+
+
+    background = Figma.DarkBackground,
+    surface = Figma.DarkBlack,
+//    onPrimary = Color.Gray,
+//    onSecondary = Color.Black,
+//    onBackground = Color.Black,
+//    onSurface = Color.Black,
 )
 
 private val LightColorPalette = lightColors(
