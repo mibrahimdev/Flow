@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -28,31 +27,31 @@ import io.github.mohamedisoliman.flow.ui.theme.Figma
 val tasks = listOf(
     Task(
         name = "100x Sit-Up",
-        project = Project("Rasion Project", Figma.Purple),
+        project = Project("Rasion Project", Figma.Pink, R.drawable.barbell),
         tags = listOf(TaskTag("Work", Figma.DarkBlack), TaskTag("Rasion Project", Figma.Purple)),
         time = "00:42:21"
     ),
     Task(
         name = "UI Design",
-        project = Project("Rasion Project", Figma.Purple),
+        project = Project("Rasion Project", Figma.DarkBlack, R.drawable.code_slash),
         tags = listOf(TaskTag("Personal", Figma.Black), TaskTag("Rasion Project", Figma.Blue)),
         time = "00:42:21"
     ),
     Task(
         name = "100x Sit-Up",
-        project = Project("Rasion Project", Figma.Purple),
+        project = Project("Rasion Project", Figma.Blue, R.drawable.barbell),
         tags = listOf(TaskTag("Work", Figma.Green), TaskTag("Rasion Project", Figma.Orange)),
         time = "00:42:21"
     ),
     Task(
         name = "Learn HTML & CSS",
-        project = Project("Rasion Project", Figma.Purple),
+        project = Project("Rasion Project", Figma.Orange, R.drawable.code_slash),
         tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
         time = "00:42:21"
     ),
     Task(
         name = "Read 10 pages of book",
-        project = Project("Rasion Project", Figma.Purple),
+        project = Project("Rasion Project", Figma.Purple, R.drawable.book),
         tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
         time = "00:42:21"
     )
@@ -148,7 +147,7 @@ fun TaskCard(task: Task = Task()) {
 @Composable
 private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
     Image(
-        painter = painterResource(R.drawable.desktop),
+        painter = painterResource(task.project.icon),
         contentDescription = "avatar",
         contentScale = ContentScale.Inside,
         modifier = modifier
@@ -306,4 +305,6 @@ data class TaskTag(
 data class Project(
     val name: String = "",
     val color: Color = Color.Transparent,
-)
+    val icon: Int = R.drawable.desktop,
+) {
+}
