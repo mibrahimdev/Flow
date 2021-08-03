@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +34,7 @@ val tasks = listOf(
     ),
     Task(
         name = "UI Design",
-        project = Project("Rasion Project", Figma.DarkBlack, R.drawable.code_slash),
+        project = Project("Rasion Project", Figma.Green, R.drawable.code_slash),
         tags = listOf(TaskTag("Personal", Figma.Black), TaskTag("Rasion Project", Figma.Blue)),
         time = "00:42:21"
     ),
@@ -80,10 +81,17 @@ fun Home() {
             SectionHead(
                 modifier =
                 Modifier.padding(top = 24.dp),
-                title = "Today",
+                title = stringResource(R.string.today),
                 endItem = {
-                    Text(modifier = Modifier.clickable(onClick = { }),
-                        text = "See All", style = MaterialTheme.typography.subtitle1)
+                    TextButton(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.see_all),
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    }
                 }
             )
         }

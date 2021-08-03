@@ -8,35 +8,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200,
 
+    primary = Figma.Black,
+    primaryVariant = Figma.DarkBlack,
+    secondary = Figma.Purple,
 
-    background = Figma.DarkBackground,
-    surface = Figma.DarkBlack,
-//    onPrimary = Color.Gray,
-//    onSecondary = Color.Black,
-//    onBackground = Color.Black,
-//    onSurface = Color.Black,
+    background = Figma.DarkBlack,
+    surface = Figma.Black,
+
+    onPrimary = Figma.White,
+    onSecondary = Figma.White,
+    onBackground = Figma.White,
+    onSurface = Figma.White,
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200,
+
+    primary = Figma.White,
+    primaryVariant = Figma.White,
+    secondary = Figma.Purple,
 
 
     background = Color.White,
     surface = Figma.Background,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
+
+    onPrimary = Figma.Black,
+    onSecondary = Figma.DarkBlack,
     onBackground = Color.Black,
     onSurface = Color.Black,
 
-    /* Other default colors to override
-
-    */
 )
 
 @Composable
