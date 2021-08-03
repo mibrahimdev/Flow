@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -29,7 +30,7 @@ val tasks = listOf(
     Task(
         name = "100x Sit-Up",
         project = Project("Rasion Project", Figma.Pink, R.drawable.barbell),
-        tags = listOf(TaskTag("Work", Figma.DarkBlack), TaskTag("Rasion Project", Figma.Purple)),
+        tags = listOf(TaskTag("Work", Figma.Black), TaskTag("Rasion Project", Figma.Purple)),
         time = "00:42:21"
     ),
     Task(
@@ -40,7 +41,7 @@ val tasks = listOf(
     ),
     Task(
         name = "100x Sit-Up",
-        project = Project("Rasion Project", Figma.Blue, R.drawable.barbell),
+        project = Project("Rasion Project", Figma.Blue, R.drawable.desktop),
         tags = listOf(TaskTag("Work", Figma.Green), TaskTag("Rasion Project", Figma.Orange)),
         time = "00:42:21"
     ),
@@ -121,7 +122,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun TaskCard(task: Task = Task()) {
     CardSurface(
         modifier = Modifier
-            .height(95.dp)
+            .height(100.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -161,7 +162,12 @@ private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
         modifier = modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(color = task.project.color)
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(
+                    task.project.color,
+                    task.project.color.copy(alpha = .4f)
+                )
+            ))
     )
 }
 
@@ -174,7 +180,7 @@ private fun StartTask(
     Column(
         modifier = modifier.wrapContentHeight(),
         horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = task.time)
         IconButton(onClick = onClick) {
