@@ -179,7 +179,7 @@ private fun StartTask(
 ) {
     Column(
         modifier = modifier.wrapContentHeight(),
-        horizontalAlignment = Alignment.End,
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = task.time)
