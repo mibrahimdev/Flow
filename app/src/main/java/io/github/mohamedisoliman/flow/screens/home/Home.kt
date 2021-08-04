@@ -1,5 +1,6 @@
 package io.github.mohamedisoliman.flow.screens.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,19 +42,17 @@ fun Home(
     val tasks = remember { data }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(all = 16.dp)
     ) {
         items(1) {
-            HomeTopBar(modifier = Modifier.padding(bottom = 24.dp)) {}
+            HomeTopBar(modifier = Modifier.padding(bottom = 16.dp)) {}
             CurrentTaskCard()
         }
         item {
             SectionHead(
-                modifier =
-                Modifier.padding(top = 24.dp),
                 title = stringResource(R.string.today),
                 endItem = {
                     TextButton(
@@ -69,7 +68,7 @@ fun Home(
             )
         }
 
-        tasks.forEach { task ->
+        tasks.take(4).forEach { task ->
             item {
                 TaskCard(task)
             }
@@ -94,7 +93,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun TaskCard(task: Task = Task()) {
     CardSurface(
         modifier = Modifier
-            .height(100.dp)
+            .height(90.dp)
             .fillMaxWidth()
     ) {
         Row(
