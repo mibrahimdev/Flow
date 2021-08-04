@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import io.github.mohamedisoliman.flow.screens.home.Home
+import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.theme.FlowTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
             FlowTheme {
                 // A surface container using the 'background' color from the theme
                 Surface {
-                    Home()
+                    Home(data = tasks)
                 }
             }
         }

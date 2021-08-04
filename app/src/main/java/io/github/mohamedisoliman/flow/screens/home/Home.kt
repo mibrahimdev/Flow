@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,51 +23,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.R
+import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.theme.CardSurface
 import io.github.mohamedisoliman.flow.ui.theme.Figma
-
-
-val tasks = listOf(
-    Task(
-        name = "100x Sit-Up",
-        project = Project("Rasion Project", Figma.Pink, R.drawable.barbell),
-        tags = listOf(TaskTag("Work", Figma.Black), TaskTag("Rasion Project", Figma.Purple)),
-        time = "00:42:21"
-    ),
-    Task(
-        name = "UI Design",
-        project = Project("Rasion Project", Figma.Green, R.drawable.code_slash),
-        tags = listOf(TaskTag("Personal", Figma.Black), TaskTag("Rasion Project", Figma.Blue)),
-        time = "00:42:21"
-    ),
-    Task(
-        name = "100x Sit-Up",
-        project = Project("Rasion Project", Figma.Blue, R.drawable.desktop),
-        tags = listOf(TaskTag("Work", Figma.Green), TaskTag("Rasion Project", Figma.Orange)),
-        time = "00:42:21"
-    ),
-    Task(
-        name = "Learn HTML & CSS",
-        project = Project("Rasion Project", Figma.Orange, R.drawable.code_slash),
-        tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
-        time = "00:42:21"
-    ),
-    Task(
-        name = "Read 10 pages of book",
-        project = Project("Rasion Project", Figma.Purple, R.drawable.book),
-        tags = listOf(TaskTag("Work", Figma.Pink), TaskTag("Rasion Project", Figma.Purple)),
-        time = "00:42:21"
-    )
-)
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    Home()
+    Home(data = tasks)
 }
 
 @Composable
-fun Home() {
+fun Home(
+    modifier: Modifier = Modifier,
+    data: List<Task> = emptyList(),
+) {
+    val tasks = remember { data }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
