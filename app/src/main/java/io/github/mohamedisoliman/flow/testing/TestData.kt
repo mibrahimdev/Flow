@@ -2,9 +2,9 @@ package io.github.mohamedisoliman.flow.testing
 
 import androidx.compose.ui.graphics.Color
 import io.github.mohamedisoliman.flow.R
-import io.github.mohamedisoliman.flow.screens.home.Project
-import io.github.mohamedisoliman.flow.screens.home.Task
-import io.github.mohamedisoliman.flow.screens.home.TaskTag
+import io.github.mohamedisoliman.flow.ui.screens.home.Project
+import io.github.mohamedisoliman.flow.ui.screens.home.Task
+import io.github.mohamedisoliman.flow.ui.screens.home.TaskTag
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 
 val tasks = listOf(

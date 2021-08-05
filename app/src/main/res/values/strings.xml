@@ -3,4 +3,6 @@
     <string name="app_name_long">Flow: Track Your Time</string>
     <string name="see_all">See All</string>
     <string name="today">Today</string>
+    <string name="home">home</string>
+    <string name="report">report</string>
 </resources>

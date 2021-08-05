@@ -13,8 +13,8 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Figma.DarkBlack,
     secondary = Figma.White,
 
-    background = Figma.DarkBackground,
-    surface = Figma.Black,
+    background = Figma.Black,
+    surface = Figma.DarkBackground,
 
     onPrimary = Figma.White,
     onSecondary = Figma.DarkBackground,
@@ -28,9 +28,8 @@ private val LightColorPalette = lightColors(
     primaryVariant = Figma.White,
     secondary = Figma.DarkBackground,
 
-
-    background = Color.White,
-    surface = Figma.Background,
+    background = Figma.Background,
+    surface = Color.White,
 
     onPrimary = Figma.Black,
     onSecondary = Figma.White,

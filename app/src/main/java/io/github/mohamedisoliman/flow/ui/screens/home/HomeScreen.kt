@@ -1,9 +1,7 @@
-package io.github.mohamedisoliman.flow.screens.home
+package io.github.mohamedisoliman.flow.ui.screens.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,17 +23,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.tasks
-import io.github.mohamedisoliman.flow.ui.theme.CardSurface
+import io.github.mohamedisoliman.flow.ui.CardSurface
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    Home(data = tasks)
+    HomeScreen(data = tasks)
 }
 
 @Composable
-fun Home(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     data: List<Task> = emptyList(),
 ) {
@@ -133,12 +131,7 @@ private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
         modifier = modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(brush = Brush.verticalGradient(
-                colors = listOf(
-                    task.project.color,
-                    task.project.color.copy(alpha = .4f)
-                )
-            ))
+            .background(color = task.project.color)
     )
 }
 
