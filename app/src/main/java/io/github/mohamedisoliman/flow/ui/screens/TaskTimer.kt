@@ -6,7 +6,7 @@ import io.github.mohamedisoliman.flow.testing.tasks
 
 
 @Composable
-fun CurrentTaskScreen(taskId: Int?) {
+fun TaskTimer(taskId: Int?) {
     val task = tasks.firstOrNull { it.id == taskId }
     Text(text = task?.name ?: "Current Task")
 }
