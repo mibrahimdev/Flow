@@ -1,8 +1,7 @@
-package io.github.mohamedisoliman.flow.screens.home
+package io.github.mohamedisoliman.flow.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -24,36 +23,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.tasks
-import io.github.mohamedisoliman.flow.ui.theme.CardSurface
+import io.github.mohamedisoliman.flow.ui.CardSurface
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    Home(data = tasks)
+    HomeScreen(data = tasks)
 }
 
 @Composable
-fun Home(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     data: List<Task> = emptyList(),
 ) {
     val tasks = remember { data }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(all = 16.dp)
     ) {
         items(1) {
-            HomeTopBar(modifier = Modifier.padding(bottom = 24.dp)) {}
+            HomeTopBar(modifier = Modifier.padding(bottom = 16.dp)) {}
             CurrentTaskCard()
         }
         item {
             SectionHead(
-                modifier =
-                Modifier.padding(top = 24.dp),
                 title = stringResource(R.string.today),
                 endItem = {
                     TextButton(
@@ -69,7 +66,7 @@ fun Home(
             )
         }
 
-        tasks.forEach { task ->
+        tasks.take(4).forEach { task ->
             item {
                 TaskCard(task)
             }
@@ -94,7 +91,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun TaskCard(task: Task = Task()) {
     CardSurface(
         modifier = Modifier
-            .height(100.dp)
+            .height(90.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -134,12 +131,7 @@ private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
         modifier = modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(brush = Brush.verticalGradient(
-                colors = listOf(
-                    task.project.color,
-                    task.project.color.copy(alpha = .4f)
-                )
-            ))
+            .background(color = task.project.color)
     )
 }
 

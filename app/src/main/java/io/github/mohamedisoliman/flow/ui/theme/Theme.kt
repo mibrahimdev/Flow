@@ -11,13 +11,13 @@ private val DarkColorPalette = darkColors(
 
     primary = Figma.Black,
     primaryVariant = Figma.DarkBlack,
-    secondary = Figma.Purple,
+    secondary = Figma.White,
 
-    background = Figma.DarkBackground,
-    surface = Figma.Black,
+    background = Figma.Black,
+    surface = Figma.DarkBackground,
 
     onPrimary = Figma.White,
-    onSecondary = Figma.White,
+    onSecondary = Figma.DarkBackground,
     onBackground = Figma.White,
     onSurface = Figma.White,
 )
@@ -26,18 +26,17 @@ private val LightColorPalette = lightColors(
 
     primary = Figma.White,
     primaryVariant = Figma.White,
-    secondary = Figma.Purple,
+    secondary = Figma.DarkBackground,
 
-
-    background = Color.White,
-    surface = Figma.Background,
+    background = Figma.Background,
+    surface = Color.White,
 
     onPrimary = Figma.Black,
-    onSecondary = Figma.DarkBlack,
+    onSecondary = Figma.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
 
-)
+    )
 
 @Composable
 fun FlowTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
