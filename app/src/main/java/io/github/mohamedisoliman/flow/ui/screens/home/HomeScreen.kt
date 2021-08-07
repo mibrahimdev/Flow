@@ -2,6 +2,7 @@ package io.github.mohamedisoliman.flow.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -21,23 +21,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.Navigator
 import io.github.mohamedisoliman.flow.R
+import io.github.mohamedisoliman.flow.testing.currentTask
 import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
-import io.github.mohamedisoliman.flow.ui.theme.Figma
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen(data = tasks)
+    HomeScreen(currentTask = currentTask, data = tasks)
 }
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     data: List<Task> = emptyList(),
+    currentTask: Task = Task(),
+    onTaskClicked: (Task) -> Unit = {},
 ) {
     val tasks = remember { data }
+    val currentTaskState = remember { currentTask }
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -47,7 +51,7 @@ fun HomeScreen(
     ) {
         items(1) {
             HomeTopBar(modifier = Modifier.padding(bottom = 16.dp)) {}
-            CurrentTaskCard()
+            CurrentTaskCard(task = currentTask, onClick = { onTaskClicked(currentTaskState) })
         }
         item {
             SectionHead(
@@ -66,9 +70,9 @@ fun HomeScreen(
             )
         }
 
-        tasks.take(4).forEach { task ->
+        tasks.take(4).forEach {
             item {
-                TaskCard(task)
+                TaskCard(task = it, onTaskClicked = onTaskClicked)
             }
         }
     }
@@ -88,11 +92,16 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun TaskCard(task: Task = Task()) {
+fun TaskCard(
+    modifier: Modifier = Modifier,
+    task: Task = Task(),
+    onTaskClicked: (Task) -> Unit,
+) {
     CardSurface(
-        modifier = Modifier
+        modifier = modifier
             .height(90.dp)
             .fillMaxWidth()
+            .clickable { onTaskClicked(task) }
     ) {
         Row(
             modifier = Modifier
@@ -203,21 +212,24 @@ fun SectionHead(
 @Composable
 fun CurrentTaskCard(
     modifier: Modifier = Modifier,
-    taskTimer: String = "00:32:10",
-    project: String = "Rasion Project",
-    projectTint: Color = Figma.Purple,
-    onClick: () -> Unit = {},
+    task: Task = Task(),
+    onClick: (Task) -> Unit = {},
 ) {
+    val taskSate = remember { task }
+
     CardSurface(modifier = Modifier
         .wrapContentHeight()
         .then(modifier)
+        .clickable { onClick(taskSate) }
     ) {
         Column(modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
             verticalArrangement = Arrangement.SpaceAround) {
-            TaskView(taskTimer, onClick)
+            TaskView(task.time) {
+
+            }
             ProjectView(
-                projectName = project,
-                projectTint = projectTint
+                projectName = task.project.name,
+                projectTint = task.project.color
             )
 
         }
@@ -273,7 +285,8 @@ data class Task(
     val time: String = "",
     val project: Project = Project(),
     val tags: List<TaskTag> = emptyList(),
-)
+    val id: Int = -1,
+) : Navigator.Extras
 
 data class TaskTag(
     val name: String = "",
