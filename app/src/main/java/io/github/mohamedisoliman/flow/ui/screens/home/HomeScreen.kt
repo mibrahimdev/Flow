@@ -26,6 +26,7 @@ import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.currentTask
 import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
+import io.github.mohamedisoliman.flow.ui.TagView
 
 @Preview(showBackground = true)
 @Composable
@@ -179,15 +180,6 @@ private fun TagsRow(
     }
 }
 
-@Composable
-fun TagView(tagName: String, tagColor: Color) {
-    Surface(color = tagColor.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
-        Text(modifier = Modifier.padding(8.dp),
-            text = tagName,
-            style = MaterialTheme.typography.caption.copy(color = tagColor, fontSize = 12.sp)
-        )
-    }
-}
 
 @Composable
 fun SectionHead(
