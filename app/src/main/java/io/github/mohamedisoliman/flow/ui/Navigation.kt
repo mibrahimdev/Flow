@@ -2,9 +2,7 @@ package io.github.mohamedisoliman.flow.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.*
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -80,26 +78,27 @@ fun AppBottomBar(
     navController: NavHostController,
     visible: Boolean = true,
 ) {
-    val density = LocalDensity.current
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     AnimatedVisibility(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(85.dp)
-            .padding(start = 16.dp, end = 16.dp)
-            .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)),
-
         visible = visible,
-        enter = slideInVertically(initialOffsetY = { with(density) { 56.dp.roundToPx() } })
-                + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { with(density) { 56.dp.roundToPx() } })
-                + fadeOut()
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        )
 
     ) {
         BottomNavigation(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(85.dp)
+                .padding(start = 16.dp, end = 16.dp)
+                .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)),
             elevation = 4.dp,
             backgroundColor = MaterialTheme.colors.primarySurface,
         ) {
