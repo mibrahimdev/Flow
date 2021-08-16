@@ -26,6 +26,7 @@ import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.currentTask
 import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
+import io.github.mohamedisoliman.flow.ui.ProjectView
 import io.github.mohamedisoliman.flow.ui.TagView
 
 @Preview(showBackground = true)
@@ -249,28 +250,6 @@ private fun TaskView(taskTimer: String, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun ProjectView(
-    modifier: Modifier = Modifier,
-    projectName: String = "",
-    projectTint: Color = Color.Transparent,
-) {
-    Row(modifier = Modifier
-        .padding(top = 24.dp)
-        .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center) {
-        Icon(
-            modifier = Modifier
-                .padding(end = 12.dp)
-                .size(12.dp),
-            painter = painterResource(R.drawable.eclipse),
-            contentDescription = "",
-            tint = projectTint
-        )
-        Text(text = projectName)
-    }
-}
 
 data class Task(
     val name: String = "",
