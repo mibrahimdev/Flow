@@ -1,5 +1,6 @@
 package io.github.mohamedisoliman.flow.ui
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.padding
@@ -30,8 +31,6 @@ import kotlin.time.ExperimentalTime
 @Composable
 fun PreviewCircularCountDown() {
 
-    CircularProgressIndicator()
-
     CircularCountDown(
         modifier = Modifier
             .padding(24.dp)
@@ -39,6 +38,8 @@ fun PreviewCircularCountDown() {
         progress = 0.5f,
         strokeWidth = 20.dp
     )
+
+    CircularProgressIndicator(progress = .3f)
 }
 
 @Composable
@@ -62,7 +63,7 @@ fun CircularCountDown(
     ) {
         // Start at 12 O'clock
         val startAngle = 270f
-        val sweep = progress /** 360f*/
+        val sweep = progress
         // To draw this circle we need a rect with edges that line up with the midpoint of the stroke.
         // To do this we need to remove half the stroke width from the total diameter for both sides.
         val diameterOffset = stroke.width / 2
