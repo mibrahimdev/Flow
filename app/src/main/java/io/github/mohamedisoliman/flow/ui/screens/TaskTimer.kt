@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.*
 import kotlin.time.ExperimentalTime
 
 
-const val interval = 1000L
+const val interval = 1000
 
 @Preview(showBackground = true)
 @Composable
@@ -93,12 +93,9 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 @Composable
 fun CountDownCircle(modifier: Modifier = Modifier) {
 
-    val target = 50 //seconds
-    val progress = progressAnimation(target)
-//    val progress = progressTransitionAnimation(target)
-
-
-
+    val target = 60 //seconds
+    val lastPause = (20.toFloat() / target)
+    val progress = continuousAnimation(lastPause, target) //start
     CircularCountDown(
         modifier = modifier
             .padding(24.dp)
@@ -108,6 +105,24 @@ fun CountDownCircle(modifier: Modifier = Modifier) {
         color = Figma.Purple.radial(),
         strokeWidth = 20.dp
     )
+}
+
+@Composable
+private fun continuousAnimation(
+    lastPause: Float,
+    target: Int,
+): Animatable<Float, AnimationVector1D> {
+    //    val progress = progressAnimation(target)
+//    val progress = progressTransitionAnimation(target)
+    //to create continuous animation we could set the target to full arc [360f]
+    // and animation time would be the time target.
+
+    val progress = remember { Animatable(lastPause * 360f) } //start
+    LaunchedEffect(key1 = progress) {
+        progress.animateTo(targetValue = 360f,
+            animationSpec = tween(target * interval, easing = LinearEasing))
+    }
+    return progress
 }
 
 @Composable
@@ -125,7 +140,7 @@ private fun progressTransitionAnimation(target: Int): State<Float> {
     }
 
     LaunchedEffect(key1 = currentSeconds, block = {
-        (0..target).asFlow().onEach { delay(interval) }.collect {
+        (0..target).asFlow().onEach { delay(interval.toLong()) }.collect {
             currentSeconds.value = it.toFloat()
         }
     })
