@@ -1,5 +1,7 @@
 package io.github.mohamedisoliman.flow.ui.screens
 
+import android.text.format.DateUtils
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -10,20 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.tasks
-import io.github.mohamedisoliman.flow.ui.CircularCountDown
-import io.github.mohamedisoliman.flow.ui.ProjectView
-import io.github.mohamedisoliman.flow.ui.TagStyle
-import io.github.mohamedisoliman.flow.ui.TagView
+import io.github.mohamedisoliman.flow.ui.*
 import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 import io.github.mohamedisoliman.flow.ui.theme.radial
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlin.time.ExperimentalTime
 
 
 const val interval = 1000
@@ -40,10 +40,20 @@ fun TaskTimer(taskId: Int?) {
     TimerContainer(task = task)
 }
 
+@ObsoleteCoroutinesApi
 @Composable
 fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
     val taskState = remember { task }
     val tag = taskState?.tags?.firstOrNull()
+
+    val targetTime = 60L * 60
+    val lastPause = 60L * 59
+    val tick = remember { mutableStateOf(lastPause) }
+
+    startTimer(targetTime, lastPause) {
+        tick.value = it
+    }
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -80,7 +90,30 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
                 )
             }
 
-            CountDownCircle()
+            Box(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+            ) {
+
+                CountDownCircle(
+                    modifier = modifier
+                        .padding(24.dp)
+                        .size(300.dp)
+                        .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+                        .align(Alignment.Center),
+                    targetTimeInSeconds = targetTime,
+                    currentTimeInSeconds = lastPause
+                )
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text = tick.value.formatDuration(),
+                    style = MaterialTheme.typography.h3.copy(fontWeight = FontWeight.Medium)
+                )
+
+            }
+
         }
 
 
@@ -89,79 +122,26 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 
 }
 
-@OptIn(ExperimentalTime::class, kotlinx.coroutines.ObsoleteCoroutinesApi::class)
-@Composable
-fun CountDownCircle(modifier: Modifier = Modifier) {
+fun Long.formatDuration(): String = if (this < 60) {
+    toString()
+} else {
+    DateUtils.formatElapsedTime(this)
+}
 
-    val target = 60 //seconds
-    val lastPause = (20.toFloat() / target)
-    val progress = continuousAnimation(lastPause, target) //start
+@Composable
+fun CountDownCircle(
+    modifier: Modifier = Modifier,
+    targetTimeInSeconds: Long = 0,
+    currentTimeInSeconds: Long = 0,
+) {
+
+    val progress = continuousAnimation(currentTimeInSeconds, targetTimeInSeconds) //start
     CircularCountDown(
-        modifier = modifier
-            .padding(24.dp)
-            .size(300.dp)
-            .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+        modifier = modifier,
         progress = progress.value,
         color = Figma.Purple.radial(),
         strokeWidth = 20.dp
     )
-}
-
-@Composable
-private fun continuousAnimation(
-    lastPause: Float,
-    target: Int,
-): Animatable<Float, AnimationVector1D> {
-    //    val progress = progressAnimation(target)
-//    val progress = progressTransitionAnimation(target)
-    //to create continuous animation we could set the target to full arc [360f]
-    // and animation time would be the time target.
-
-    val progress = remember { Animatable(lastPause * 360f) } //start
-    LaunchedEffect(key1 = progress) {
-        progress.animateTo(targetValue = 360f,
-            animationSpec = tween(target * interval, easing = LinearEasing))
-    }
-    return progress
-}
-
-@Composable
-private fun progressTransitionAnimation(target: Int): State<Float> {
-    val currentSeconds = remember { mutableStateOf(0f) }
-    val transition = updateTransition(targetState = currentSeconds.value, label = "")
-    val progress = transition.animateFloat(
-        transitionSpec = { tween(200, easing = FastOutSlowInEasing) }, label = ""
-    ) { timeLeft ->
-        if (timeLeft < 0) {
-            360f
-        } else {
-            (timeLeft / target) * 360f
-        }
-    }
-
-    LaunchedEffect(key1 = currentSeconds, block = {
-        (0..target).asFlow().onEach { delay(interval.toLong()) }.collect {
-            currentSeconds.value = it.toFloat()
-        }
-    })
-    return progress
-}
-
-@Composable
-private fun progressAnimation(seconds: Int): Animatable<Float, AnimationVector1D> {
-    val interval = 1000L
-    val animateFloat = remember { Animatable(0f) }
-    LaunchedEffect(key1 = animateFloat) {
-        (0..seconds).asFlow()
-            .onEach { delay(interval) }
-            .collect {
-                animateFloat.animateTo(
-                    targetValue = (it.toFloat() / seconds) * 360f,
-                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-    }
-    return animateFloat
 }
 
 @Composable

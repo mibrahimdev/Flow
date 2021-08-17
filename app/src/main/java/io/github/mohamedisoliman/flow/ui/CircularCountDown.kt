@@ -1,15 +1,14 @@
 package io.github.mohamedisoliman.flow.ui
 
-import androidx.annotation.FloatRange
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProgressIndicatorDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -23,6 +22,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.mohamedisoliman.flow.ui.screens.interval
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlin.time.ExperimentalTime
 
 
@@ -35,17 +39,15 @@ fun PreviewCircularCountDown() {
         modifier = Modifier
             .padding(24.dp)
             .size(300.dp),
-        progress = 0.5f,
+        progress = 0.5f * 360f,
         strokeWidth = 20.dp
     )
-
-    CircularProgressIndicator(progress = .3f)
 }
 
 @Composable
 fun CircularCountDown(
     modifier: Modifier = Modifier,
-    progress: Float = 0.001f,
+    progress: Float = 0f,
     color: Color = MaterialTheme.colors.primary,
     strokeWidth: Dp = ProgressIndicatorDefaults.StrokeWidth,
 ) {
@@ -71,7 +73,6 @@ fun CircularCountDown(
 
         //background white arc
         drawBackgroundArc(backgroundArkColor, startAngle, diameterOffset, arcDimen, strokeWidth)
-
         //the progress arc
         drawProgressArc(color, startAngle, sweep, diameterOffset, arcDimen, stroke)
     }
@@ -116,3 +117,73 @@ private fun DrawScope.drawProgressArc(
         style = stroke
     )
 }
+
+
+@Composable
+fun continuousAnimation(
+    lastPause: Long,
+    target: Long,
+): Animatable<Float, AnimationVector1D> {
+    val initialValue = (lastPause.toFloat() / target) * 360f
+    val progress = remember { Animatable(initialValue) } //start
+    LaunchedEffect(key1 = progress) {
+        progress.animateTo(
+            targetValue = 360f,
+            animationSpec = tween(((target - lastPause) * interval).toInt(), easing = LinearEasing)
+        )
+    }
+    return progress
+}
+
+@Composable
+fun progressTransitionAnimation(target: Int): State<Float> {
+    val currentSeconds = remember { mutableStateOf(0f) }
+    val transition = updateTransition(targetState = currentSeconds.value, label = "")
+    val progress = transition.animateFloat(
+        transitionSpec = { tween(200, easing = FastOutSlowInEasing) }, label = ""
+    ) { timeLeft ->
+        if (timeLeft < 0) {
+            360f
+        } else {
+            (timeLeft / target) * 360f
+        }
+    }
+
+    LaunchedEffect(key1 = currentSeconds, block = {
+        (0..target).asFlow().onEach { delay(interval.toLong()) }.collect {
+            currentSeconds.value = it.toFloat()
+        }
+    })
+    return progress
+}
+
+@Composable
+fun progressAnimation(seconds: Int): Animatable<Float, AnimationVector1D> {
+    val interval = 1000L
+    val animateFloat = remember { Animatable(0f) }
+    LaunchedEffect(key1 = animateFloat) {
+        (0..seconds).asFlow()
+            .onEach { delay(interval) }
+            .collect {
+                animateFloat.animateTo(
+                    targetValue = (it.toFloat() / seconds) * 360f,
+                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+    }
+    return animateFloat
+}
+
+@Composable
+fun startTimer(
+    targetTime: Long,
+    lastPause: Long,
+    onTick: (Long) -> Unit,
+) {
+    LaunchedEffect(key1 = "Timer") {
+        (lastPause..targetTime).asFlow().onEach { delay(interval.toLong()) }.collect {
+            onTick(it)
+        }
+    }
+}
+
