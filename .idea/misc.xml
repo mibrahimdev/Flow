@@ -27,11 +27,13 @@
         <entry key="app/src/main/res/drawable/desktop.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/eclipse.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/drawable/more.xml" value="0.1685" />
+        <entry key="app/src/main/res/drawable/pause.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/pie_char_filled.xml" value="0.184" />
         <entry key="app/src/main/res/drawable/pie_chart_outlined.xml" value="0.184" />
         <entry key="app/src/main/res/drawable/pin_filled.xml" value="0.1455" />
         <entry key="app/src/main/res/drawable/pin_outlined.xml" value="0.1455" />
         <entry key="app/src/main/res/drawable/play.xml" value="0.1935" />
+        <entry key="app/src/main/res/drawable/stop_filled.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/time_filled.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/time_outline.xml" value="0.1" />
       </map>
