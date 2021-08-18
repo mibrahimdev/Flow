@@ -15,8 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,7 @@ import androidx.navigation.compose.*
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.testing.currentTask
 import io.github.mohamedisoliman.flow.testing.tasks
-import io.github.mohamedisoliman.flow.ui.screens.TaskTimer
+import io.github.mohamedisoliman.flow.ui.screens.timer.TaskTimer
 import io.github.mohamedisoliman.flow.ui.screens.home.HomeScreen
 import io.github.mohamedisoliman.flow.ui.screens.report.ReportScreen
 

@@ -1,8 +1,6 @@
-package io.github.mohamedisoliman.flow.ui.screens
+package io.github.mohamedisoliman.flow.ui.screens.timer
 
 import android.text.format.DateUtils
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
@@ -22,8 +20,6 @@ import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 import io.github.mohamedisoliman.flow.ui.theme.radial
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
 
 
 const val interval = 1000
@@ -46,8 +42,8 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
     val taskState = remember { task }
     val tag = taskState?.tags?.firstOrNull()
 
-    val targetTime = 60L * 60
-    val lastPause = 60L * 59
+    val targetTime = 60L * 10
+    val lastPause = 60L * 7
     val tick = remember { mutableStateOf(lastPause) }
 
     startTimer(targetTime, lastPause) {
@@ -109,7 +105,7 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
                     modifier = Modifier
                         .align(Alignment.Center),
                     text = tick.value.formatDuration(),
-                    style = MaterialTheme.typography.h3.copy(fontWeight = FontWeight.Medium)
+                    style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Medium)
                 )
 
             }

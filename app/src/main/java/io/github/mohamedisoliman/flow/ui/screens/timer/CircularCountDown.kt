@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.flow.ui
+package io.github.mohamedisoliman.flow.ui.screens.timer
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -22,7 +22,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.mohamedisoliman.flow.ui.screens.interval
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
