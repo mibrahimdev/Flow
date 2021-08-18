@@ -61,7 +61,6 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 
     Column(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
     ) {
 
         TimerHeader(tag)
@@ -84,13 +83,17 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 
         Row(
             modifier = modifier
-                .padding(45.dp)
+                .padding(start = 32.dp, end = 32.dp, top = 100.dp, bottom = 32.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CircleButton(id = R.drawable.pause_filled)
-            CircleButton(id = R.drawable.stop_filled)
+            CircleButton(id = R.drawable.pause_filled) {
+
+            }
+            CircleButton(id = R.drawable.stop_filled) {
+
+            }
         }
 
 
@@ -133,6 +136,10 @@ private fun TimerCountdownContainer(
 
 @Composable
 private fun TimerHeader(tag: TaskTag?) {
+
+    val pinned = remember { mutableStateOf(false) }
+
+
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp),
@@ -147,15 +154,17 @@ private fun TimerHeader(tag: TaskTag?) {
             )
         }
 
-        PinToggle()
+        PinToggle(checked = pinned.value) {
+            pinned.value = it
+        }
     }
 }
 
 @Composable
 private fun CircleButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
     @DrawableRes id: Int,
+    onClick: () -> Unit = {},
 ) {
 
     IconButton(
@@ -195,13 +204,15 @@ fun CountDownCircle(
 }
 
 @Composable
-private fun PinToggle() {
+private fun PinToggle(
+    modifier: Modifier = Modifier,
+    checked: Boolean = false,
+    onChecked: (Boolean) -> Unit = {},
+) {
     IconToggleButton(
-        checked = false, onCheckedChange = {
-
-        }) {
+        checked = checked, onCheckedChange = onChecked) {
         Icon(
-            painter = painterResource(id = R.drawable.pin_outlined),
+            painter = painterResource(id = if (checked) R.drawable.pin_filled else R.drawable.pin_outlined),
             contentDescription = ""
         )
     }
