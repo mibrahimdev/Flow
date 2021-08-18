@@ -23,8 +23,3 @@ object Figma {
     val DarkBackground = Color(0xFF292639)
 }
 
-
-fun Color.radial(): Color {
-    return this //Todo
-}
-
