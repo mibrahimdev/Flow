@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
@@ -30,6 +31,7 @@ import io.github.mohamedisoliman.flow.testing.tasks
 import io.github.mohamedisoliman.flow.ui.screens.timer.TaskTimer
 import io.github.mohamedisoliman.flow.ui.screens.home.HomeScreen
 import io.github.mohamedisoliman.flow.ui.screens.report.ReportScreen
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 
 
 @Composable
@@ -42,25 +44,40 @@ fun AppNavigation(
         startDestination = Screen.Home.route,
         modifier = modifier
     ) {
-        composable(Screen.Home.route) {
-            HomeScreen(currentTask = currentTask, data = tasks, onTaskClicked = {
-                navController.navigate("${Screen.TaskTimer.route}/${it.id}")
-            })
-        }
-        composable(Screen.Report.route) {
-            ReportScreen()
-        }
+        homeComposable(navController)
 
-        composable(
-            route = "${Screen.TaskTimer.route}/{taskId}",
-            arguments = listOf(navArgument("taskId") { type = NavType.IntType })
-        ) { entry ->
-            val taskId = entry.arguments?.getInt("taskId")
-            TaskTimer(taskId)
-        }
+        report(navController)
+
+        taskTimer(navController)
     }
 
 
+}
+
+private fun @Composable NavGraphBuilder.report(navController: NavHostController) {
+    composable(Screen.Report.route) {
+        ReportScreen()
+    }
+}
+
+
+@OptIn(ObsoleteCoroutinesApi::class)
+private fun @Composable NavGraphBuilder.taskTimer(navController: NavHostController) {
+    composable(
+        route = "${Screen.TaskTimer.route}/{taskId}",
+        arguments = listOf(navArgument("taskId") { type = NavType.IntType })
+    ) { entry ->
+        val taskId = entry.arguments?.getInt("taskId")
+        TaskTimer(taskId)
+    }
+}
+
+private fun @Composable NavGraphBuilder.homeComposable(navController: NavHostController) {
+    composable(Screen.Home.route) {
+        HomeScreen(currentTask = currentTask, data = tasks, onTaskClicked = {
+            navController.navigate("${Screen.TaskTimer.route}/${it.id}")
+        })
+    }
 }
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int) {
