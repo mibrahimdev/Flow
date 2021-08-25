@@ -25,7 +25,6 @@ import io.github.mohamedisoliman.flow.ui.*
 import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.screens.home.TaskTag
 import io.github.mohamedisoliman.flow.ui.theme.Figma
-import io.github.mohamedisoliman.flow.ui.theme.radial
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 
 
@@ -198,7 +197,7 @@ fun CountDownCircle(
     CircularCountDown(
         modifier = modifier,
         progress = progress.value,
-        color = Figma.Purple.radial(),
+        color = Figma.Purple,
         strokeWidth = 20.dp
     )
 }
