@@ -11,6 +11,15 @@
         <entry key="../../../../layout/compose-model-1627900770377.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1627946871474.xml" value="0.47129629629629627" />
         <entry key="../../../../layout/compose-model-1628041483477.xml" value="0.2622466216216216" />
+        <entry key="../../../../layout/compose-model-1628167016744.xml" value="0.335" />
+        <entry key="../../../../layout/compose-model-1628296488082.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1629025672681.xml" value="0.165" />
+        <entry key="../../../../layout/compose-model-1629028344508.xml" value="0.24537037037037038" />
+        <entry key="../../../../layout/compose-model-1629031082924.xml" value="0.14537037037037037" />
+        <entry key="../../../../layout/compose-model-1629033346908.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1629033730742.xml" value="0.375" />
+        <entry key="../../../../layout/compose-model-1629127403901.xml" value="0.1" />
+        <entry key="../../../../layout/custom_preview.xml" value="2.1181102362204722" />
         <entry key="app/src/main/res/drawable/arrow.xml" value="0.24814814814814815" />
         <entry key="app/src/main/res/drawable/barbell.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/book.xml" value="0.175" />
@@ -18,9 +27,13 @@
         <entry key="app/src/main/res/drawable/desktop.xml" value="0.1935" />
         <entry key="app/src/main/res/drawable/eclipse.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/drawable/more.xml" value="0.1685" />
+        <entry key="app/src/main/res/drawable/pause.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/pie_char_filled.xml" value="0.184" />
         <entry key="app/src/main/res/drawable/pie_chart_outlined.xml" value="0.184" />
+        <entry key="app/src/main/res/drawable/pin_filled.xml" value="0.1455" />
+        <entry key="app/src/main/res/drawable/pin_outlined.xml" value="0.1455" />
         <entry key="app/src/main/res/drawable/play.xml" value="0.1935" />
+        <entry key="app/src/main/res/drawable/stop_filled.xml" value="0.1175" />
         <entry key="app/src/main/res/drawable/time_filled.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/time_outline.xml" value="0.1" />
       </map>
