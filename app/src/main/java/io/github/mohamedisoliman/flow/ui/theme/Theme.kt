@@ -28,8 +28,8 @@ private val LightColorPalette = lightColors(
     primaryVariant = Figma.White,
     secondary = Figma.DarkBackground,
 
-    background = Figma.Background,
-    surface = Color.White,
+    background = Figma.LightGrey,
+    surface = Figma.Background,
 
     onPrimary = Figma.Black,
     onSecondary = Figma.White,
