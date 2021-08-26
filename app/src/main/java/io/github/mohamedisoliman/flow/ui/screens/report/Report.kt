@@ -2,6 +2,7 @@ package io.github.mohamedisoliman.flow.ui.screens.report
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -49,11 +50,16 @@ fun ReportScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SummeryCard(
+                modifier = Modifier.weight(0.1f, fill = false),
                 title = buildAnnotatedString { append("Task \nCompleted") },
                 text = buildAnnotatedString { append("20") },
                 iconId = R.drawable.task_completed)
 
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             SummeryCard(
+                modifier = Modifier.weight(0.1f, fill = false),
                 title = buildAnnotatedString { append("Time \nDuration") },
                 text = buildAnnotatedString {
                     append("1")
@@ -79,9 +85,10 @@ fun SummeryCard(
     @DrawableRes
     iconId: Int = R.drawable.task_completed,
 ) {
-    CardSurface(modifier = Modifier
-        .height(130.dp) //Todo: should be more dynamic
-        .width(160.dp)
+    CardSurface(
+
+        modifier = modifier
+            .height(130.dp) //Todo: should be more dynamic
     ) {
         Column(
             modifier = Modifier
