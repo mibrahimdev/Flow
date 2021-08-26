@@ -34,7 +34,7 @@ fun PreviewReport() {
 fun ReportScreen() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
