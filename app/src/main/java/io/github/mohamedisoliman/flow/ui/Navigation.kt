@@ -41,7 +41,7 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Report.route,//TODO: testing
         modifier = modifier
     ) {
         homeComposable(navController)

@@ -6,4 +6,5 @@
     <string name="home">home</string>
     <string name="report">report</string>
     <string name="current_task">Current Task</string>
+    <string name="reportScreenTitle">Productivity</string>
 </resources>
