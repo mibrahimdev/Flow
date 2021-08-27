@@ -58,7 +58,6 @@ fun ChartLayout() {
     val selectedTab = remember { mutableStateOf(0) }
     val onItemSelected: (Int) -> Unit = { selectedTab.value = it }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,23 +66,6 @@ fun ChartLayout() {
     ) {
         ChartScaleSelector(selectedTab, options, onItemSelected)
     }
-}
-
-@Composable
-private fun ScaleText(
-    modifier: Modifier,
-    backgroundColor: Color,
-    text: String,
-    style: TextStyle,
-) {
-    Text(
-        modifier = modifier
-            .background(backgroundColor)
-            .wrapContentSize()
-            .padding(horizontal = 32.dp, vertical = 8.dp),
-        text = text,
-        style = style
-    )
 }
 
 @Composable
@@ -136,9 +118,7 @@ fun SummeryCard(
     iconId: Int = R.drawable.task_completed,
 ) {
     CardSurface(
-
-        modifier = modifier
-            .height(130.dp) //Todo: should be more dynamic
+        modifier = modifier.height(130.dp) //Todo: should be more dynamic
     ) {
         Column(
             modifier = Modifier
