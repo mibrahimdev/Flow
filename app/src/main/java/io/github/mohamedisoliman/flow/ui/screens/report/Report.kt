@@ -69,12 +69,13 @@ fun ChartLayout() {
         TabRow(
             modifier = Modifier
                 .wrapContentSize()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Figma.Background)
+                .clip(RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colors.surface)
                 .padding(8.dp)
                 .selectableGroup(),
             selectedTabIndex = selectedTab.value,
-            backgroundColor = Figma.Background,
+            backgroundColor = MaterialTheme.colors.surface,
+            divider = { TabRowDefaults.Divider(thickness = 0.dp) },
             indicator = { tabPositions ->
                 TabIndicator(tabPositions, selectedTab.value, options[selectedTab.value])
             }
@@ -125,7 +126,7 @@ private fun TabIndicator(
     val color by transition.animateColor(
         label = "Background color"
     ) { page ->
-        if (page == tabPage) MaterialTheme.colors.primaryVariant else Figma.Background
+        if (page == tabPage) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.surface
     }
 
     val alpha = transition.animateFloat(label = "text alpha",
@@ -133,9 +134,9 @@ private fun TabIndicator(
         if (page == tabPage) 1f else 0f
     }
 
-
-    Surface(
+    Tab(
         modifier = Modifier
+            .alpha(alpha.value)
             .fillMaxSize()
             .wrapContentSize(align = Alignment.CenterStart)
             .offset(x = indicatorLeft)
@@ -143,12 +144,8 @@ private fun TabIndicator(
             .clip(RoundedCornerShape(16.dp))
             .fillMaxSize()
             .background(color),
-        color = color, shape = RoundedCornerShape(100.dp)) {
-        Tab(
-            modifier = Modifier.alpha(alpha.value),
-            title = title,
-        )
-    }
+        title = title,
+    )
 }
 
 
