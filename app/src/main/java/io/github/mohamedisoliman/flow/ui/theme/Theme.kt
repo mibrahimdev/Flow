@@ -17,7 +17,7 @@ private val DarkColorPalette = darkColors(
     surface = Figma.DarkBackground,
 
     onPrimary = Figma.White,
-    onSecondary = Figma.DarkBackground,
+    onSecondary = Figma.Grey3,
     onBackground = Figma.White,
     onSurface = Figma.White,
 )
