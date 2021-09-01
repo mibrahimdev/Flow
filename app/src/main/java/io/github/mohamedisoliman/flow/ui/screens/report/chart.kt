@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
@@ -37,39 +36,14 @@ fun PreviewLineChart() {
     LineChart()
 }
 
-@Preview
-@Composable
-fun instagramIcon() {
-    val instaColors = listOf(Color.Yellow, Color.Red, Color.Magenta)
-    Canvas(
-        modifier = Modifier
-            .size(100.dp)
-            .padding(16.dp)
-    ) {
-        drawRoundRect(
-            brush = Brush.linearGradient(colors = instaColors),
-            cornerRadius = CornerRadius(60f, 60f),
-            style = Stroke(width = 15f, cap = StrokeCap.Round)
-        )
-        drawCircle(
-            brush = Brush.linearGradient(colors = instaColors),
-            radius = 45f,
-            style = Stroke(width = 15f, cap = StrokeCap.Round)
-        )
-        drawCircle(
-            brush = Brush.linearGradient(colors = instaColors),
-            radius = 13f,
-            center = Offset(this.size.width * .80f, this.size.height * 0.20f),
-        )
-    }
-}
-
-
 @Composable
 fun LineChart() {
 
     val linesColor = Figma.Purple
+    val background = MaterialTheme.colors.primarySurface
+    val labelColor = MaterialTheme.colors.secondary
     val pointColor = Figma.Purple
+
 
     val horizontalLabels = (0 until 10).map { it.toString() }
     val verticalLabels = (0 until 10).map { it.toString() }
@@ -86,16 +60,15 @@ fun LineChart() {
     val textPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
         textSize = 64f
-        color = 0xffb0b3ff.toInt()
+        color = labelColor.toArgb()
     }
-
 
 
     Canvas(
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.surface)
+            .background(background)
     ) {
         drawIntoCanvas { canvas ->
             val bounds = 16.dp.toPx()
