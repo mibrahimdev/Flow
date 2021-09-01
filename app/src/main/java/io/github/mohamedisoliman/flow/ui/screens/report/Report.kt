@@ -100,7 +100,6 @@ fun ChartLayout() {
             points = points,
             horizontalLabels = horizontalLabels,
             verticalLabels = verticalLabels
-
         )
 
     }
