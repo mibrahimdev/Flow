@@ -78,7 +78,30 @@ fun ChartLayout() {
                 .height(20.dp)
         )
 
-        LineChart()
+
+        val horizontalLabels = (0 until 10).map { it.toString() }
+        val verticalLabels = (0 until 10).map { it.toString() }
+
+        val points = mapOf(
+            Pair(1f, 5f),
+            Pair(2f, 4f),
+            Pair(3f, 2f),
+            Pair(4f, 7f),
+            Pair(5f, 2.2f),
+            Pair(6.3f, 3.5f),
+            Pair(7.4f, 6f),
+            Pair(8.5f, 4f),
+            Pair(8f, 9f),
+            Pair(9f, 1f)
+        )
+
+
+        LineChart(
+            points = points,
+            horizontalLabels = horizontalLabels,
+            verticalLabels = verticalLabels
+
+        )
 
     }
 }

@@ -22,28 +22,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.DrawStyle
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.ui.theme.Figma
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewLineChart() {
-    LineChart()
-}
-
-@Composable
-fun LineChart() {
-
-    val linesColor = Figma.Purple
-    val background = MaterialTheme.colors.primarySurface
-    val labelColor = MaterialTheme.colors.secondary
-    val pointColor = Figma.Purple
-
 
     val horizontalLabels = (0 until 10).map { it.toString() }
     val verticalLabels = (0 until 10).map { it.toString() }
@@ -51,11 +44,34 @@ fun LineChart() {
     val points = mapOf(
         Pair(1f, 5f),
         Pair(2f, 4f),
-        Pair(3f, 9f),
-        Pair(5f, 6f),
-        Pair(6.5f, 4f),
-        Pair(8f, 9f)
+        Pair(3f, 2f),
+        Pair(4f, 7f),
+        Pair(5f, 2.2f),
+        Pair(6.3f, 3.5f),
+        Pair(7.4f, 6f),
+        Pair(8.5f, 4f),
+        Pair(8f, 9f),
+        Pair(9f, 1f)
     )
+
+    LineChart(
+        points = points,
+        horizontalLabels = horizontalLabels,
+        verticalLabels = verticalLabels
+    )
+}
+
+@Composable
+fun LineChart(
+    modifier: Modifier = Modifier,
+    points: Map<Float, Float> = emptyMap(),
+    horizontalLabels: List<String> = emptyList(),
+    verticalLabels: List<String> = emptyList(),
+) {
+
+    val background = MaterialTheme.colors.primarySurface
+    val labelColor = MaterialTheme.colors.secondary
+    val pointColor = Figma.Purple
 
     val textPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
@@ -70,6 +86,7 @@ fun LineChart() {
             .clip(RoundedCornerShape(8.dp))
             .background(background)
     ) {
+
         drawIntoCanvas { canvas ->
             val bounds = 16.dp.toPx()
 
@@ -108,11 +125,27 @@ fun LineChart() {
             )
 
 
-            points.map { entry ->
-                val xOffset = entry.key * horizontalLabelWidth
-                val yOffset = canvasHeight - entry.value * verticalLabelWidth - (bounds / 2)
-                Offset(xOffset, yOffset)
+            val trianglePath = Path().apply {
+                points.map { entry ->
+                    val xOffset = entry.key * horizontalLabelWidth
+                    val yOffset = canvasHeight - entry.value * verticalLabelWidth - (bounds / 2)
+                    xOffset to yOffset
+
+                }.sortedBy { it.first }.toList().windowed(2).forEachIndexed { _, list ->
+
+                    val start = list[0]
+                    val end = list[1]
+                    moveTo(start.first, start.second)
+                    lineTo(end.first, end.second)
+                }
             }
+
+
+            drawPath(
+                path = trianglePath,
+                color = pointColor,
+                style = Stroke(width = 20f)
+            )
 
         }
     }
