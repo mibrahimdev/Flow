@@ -75,7 +75,7 @@ fun LineChart(
 
     val textPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
-        textSize = 64f
+        textSize = 30f
         color = labelColor.toArgb()
     }
 
@@ -120,7 +120,7 @@ fun LineChart(
                 },
                 pointMode = PointMode.Points,
                 color = pointColor,
-                strokeWidth = 50f,
+                strokeWidth = 24f,
                 cap = StrokeCap.Round
             )
 
@@ -144,7 +144,7 @@ fun LineChart(
             drawPath(
                 path = trianglePath,
                 color = pointColor,
-                style = Stroke(width = 20f)
+                style = Stroke(width = 8f)
             )
 
         }
