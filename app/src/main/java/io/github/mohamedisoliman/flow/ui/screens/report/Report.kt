@@ -1,32 +1,14 @@
 package io.github.mohamedisoliman.flow.ui.screens.report
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.ui.CardSurface
-import io.github.mohamedisoliman.flow.ui.theme.Figma
+import kotlin.random.Random
 
 @Preview(showBackground = true)
 @Composable
@@ -59,9 +41,44 @@ fun ReportScreen() {
 
 @Composable
 fun ChartLayout() {
-    val options = listOf("Day", "Week", "Month")
+    val options = Scale.values().map { stringResource(id = it.stringResId) }
     val selectedTab = remember { mutableStateOf(0) }
     val onItemSelected: (Int) -> Unit = { selectedTab.value = it }
+    val horizontalAxis = when (selectedTab.value) {
+        Scale.DAY.ordinal -> Axis(
+            max = 24,//Hour
+            skipRate = 6
+        )
+        Scale.WEEK.ordinal -> Axis(
+            max = 7,
+            skipRate = 1
+        )
+        Scale.MONTH.ordinal -> Axis(
+            max = 30,
+            skipRate = 7
+        )
+        else -> throw NotImplementedError(
+            "This scale is not handled check its ordinal ${selectedTab.value}"
+        )
+    }
+
+    val maxTasksCount = when (selectedTab.value) {
+        Scale.DAY.ordinal -> 20
+        Scale.WEEK.ordinal -> 80
+        Scale.MONTH.ordinal -> 100
+        else -> throw NotImplementedError(
+            "This scale is not handled check its ordinal ${selectedTab.value}"
+        )
+    }
+
+    val verticalAxis = if (maxTasksCount > 10) {
+        Axis(max = 100, skipRate = 5)
+    } else if (maxTasksCount > 100) {
+        Axis(max = 100, skipRate = 4)
+    } else {
+        Axis(max = 50, skipRate = 5)
+    }
+
 
     Column(
         modifier = Modifier
@@ -79,8 +96,8 @@ fun ChartLayout() {
         )
 
 
-        val horizontalLabels = (0 until 10).map { it.toString() }
-        val verticalLabels = (0 until 10).map { it.toString() }
+        val horizontalLabels = (0 until horizontalAxis.max).map { it.toString() }
+        val verticalLabels = (0 until verticalAxis.max).map { it.toString() }
 
         val points = mapOf(
             1f to 5f,
@@ -98,8 +115,8 @@ fun ChartLayout() {
 
         LineChart(
             points = points,
-            horizontalLabels = horizontalLabels,
-            verticalLabels = verticalLabels
+            horizontalAxis = horizontalAxis.copy(labels = horizontalLabels),
+            verticalAxis = verticalAxis.copy(labels = verticalLabels),
         )
 
     }

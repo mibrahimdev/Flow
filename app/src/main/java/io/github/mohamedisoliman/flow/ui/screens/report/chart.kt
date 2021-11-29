@@ -19,20 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.DrawStyle
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.ui.theme.Figma
-import kotlin.math.abs
-import kotlin.math.sqrt
 
+
+data class Axis(
+    val max: Int = 1,
+    val skipRate: Int = 1,
+    val labels: List<String> = emptyList(),
+)
 
 @Preview(showBackground = true)
 @Composable
@@ -56,8 +57,12 @@ fun PreviewLineChart() {
 
     LineChart(
         points = points,
-        horizontalLabels = horizontalLabels,
-        verticalLabels = verticalLabels
+        horizontalAxis = Axis(
+            20, 0, horizontalLabels
+        ),
+        verticalAxis = Axis(
+            20, 0, verticalLabels
+        ),
     )
 }
 
@@ -65,8 +70,8 @@ fun PreviewLineChart() {
 fun LineChart(
     modifier: Modifier = Modifier,
     points: Map<Float, Float> = emptyMap(),
-    horizontalLabels: List<String> = emptyList(),
-    verticalLabels: List<String> = emptyList(),
+    horizontalAxis: Axis,
+    verticalAxis: Axis,
 ) {
 
     val background = MaterialTheme.colors.primarySurface
@@ -75,7 +80,7 @@ fun LineChart(
 
     val textPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
-        textSize = 30f
+        textSize = 16f
         color = labelColor.toArgb()
     }
 
@@ -88,24 +93,24 @@ fun LineChart(
     ) {
 
         drawIntoCanvas { canvas ->
-            val bounds = 16.dp.toPx()
+            val bounds = 10.dp.toPx()
 
             val canvasWidth = size.width - bounds
             val canvasHeight = size.height - bounds
 
             //Labels
-            val horizontalLabelWidth = canvasWidth / horizontalLabels.size
-            val verticalLabelWidth = canvasHeight / verticalLabels.size
+            val horizontalLabelWidth = canvasWidth / horizontalAxis.labels.size
+            val verticalLabelWidth = canvasHeight / verticalAxis.labels.size
 
-            horizontalLabels.forEachIndexed { index, label ->
-                if (index != 0) {
+            horizontalAxis.labels.forEachIndexed { index, label ->
+                if (index != 0 && index % horizontalAxis.skipRate == 0) {
                     val currentX = index * horizontalLabelWidth
                     canvas.nativeCanvas.drawText(label, currentX, canvasHeight, textPaint)
                 }
             }
 
-            verticalLabels.forEachIndexed { index, label ->
-                if (index != 0) {
+            verticalAxis.labels.forEachIndexed { index, label ->
+                if (index != 0 && index % verticalAxis.skipRate == 0) {
                     val currentY = index * verticalLabelWidth
                     canvas.nativeCanvas.drawText(label, bounds, canvasHeight - currentY, textPaint)
                 }
@@ -120,7 +125,7 @@ fun LineChart(
                 },
                 pointMode = PointMode.Points,
                 color = pointColor,
-                strokeWidth = 24f,
+                strokeWidth = 16f,
                 cap = StrokeCap.Round
             )
 
@@ -144,7 +149,7 @@ fun LineChart(
             drawPath(
                 path = trianglePath,
                 color = pointColor,
-                style = Stroke(width = 8f)
+                style = Stroke(width = 4f)
             )
 
         }
