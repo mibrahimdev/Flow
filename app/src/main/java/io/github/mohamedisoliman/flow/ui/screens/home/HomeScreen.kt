@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.Navigator
 import io.github.mohamedisoliman.flow.R
-import io.github.mohamedisoliman.flow.testing.currentTask
-import io.github.mohamedisoliman.flow.testing.tasks
+import io.github.mohamedisoliman.flow.fake.currentTask
+import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
 import io.github.mohamedisoliman.flow.ui.ProjectView
 import io.github.mohamedisoliman.flow.ui.TagView

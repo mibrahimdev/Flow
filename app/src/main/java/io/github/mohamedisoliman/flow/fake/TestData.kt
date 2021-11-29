@@ -1,4 +1,4 @@
-package io.github.mohamedisoliman.flow.testing
+package io.github.mohamedisoliman.flow.fake
 
 import androidx.compose.ui.graphics.Color
 import io.github.mohamedisoliman.flow.R

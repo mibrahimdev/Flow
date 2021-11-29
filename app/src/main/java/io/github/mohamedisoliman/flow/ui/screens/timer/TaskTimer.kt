@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.mohamedisoliman.flow.R
-import io.github.mohamedisoliman.flow.testing.tasks
+import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.*
 import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.screens.home.TaskTag

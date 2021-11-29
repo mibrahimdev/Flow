@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import io.github.mohamedisoliman.flow.R
-import io.github.mohamedisoliman.flow.testing.currentTask
-import io.github.mohamedisoliman.flow.testing.tasks
+import io.github.mohamedisoliman.flow.fake.currentTask
+import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.screens.timer.TaskTimer
 import io.github.mohamedisoliman.flow.ui.screens.home.HomeScreen
 import io.github.mohamedisoliman.flow.ui.screens.report.ReportScreen
