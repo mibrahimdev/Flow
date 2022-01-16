@@ -102,17 +102,17 @@ fun LineChart(
             val horizontalLabelWidth = canvasWidth / horizontalAxis.labels.size
             val verticalLabelWidth = canvasHeight / verticalAxis.labels.size
 
-            horizontalAxis.labels.forEachIndexed { index, label ->
-                if (index != 0 && index % horizontalAxis.skipRate == 0) {
-                    val currentX = index * horizontalLabelWidth
-                    canvas.nativeCanvas.drawText(label, currentX, canvasHeight, textPaint)
+            horizontalAxis.labels.forEachIndexed { xIndex, xLabel ->
+                if (xIndex != 0 && xIndex % horizontalAxis.skipRate == 0) {
+                    val currentX = xIndex * horizontalLabelWidth
+                    canvas.nativeCanvas.drawText(xLabel, currentX, canvasHeight, textPaint)
                 }
             }
 
-            verticalAxis.labels.forEachIndexed { index, label ->
-                if (index != 0 && index % verticalAxis.skipRate == 0) {
-                    val currentY = index * verticalLabelWidth
-                    canvas.nativeCanvas.drawText(label, bounds, canvasHeight - currentY, textPaint)
+            verticalAxis.labels.forEachIndexed { yIndex, yLabel ->
+                if (yIndex != 0 && yIndex % verticalAxis.skipRate == 0) {
+                    val currentY = yIndex * verticalLabelWidth
+                    canvas.nativeCanvas.drawText(yLabel, bounds, canvasHeight - currentY, textPaint)
                 }
             }
 
