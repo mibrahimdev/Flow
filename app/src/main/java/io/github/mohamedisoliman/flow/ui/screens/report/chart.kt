@@ -80,7 +80,7 @@ fun LineChart(
 
     val textPaint = Paint().apply {
         textAlign = Paint.Align.CENTER
-        textSize = 16f
+        textSize = 40f
         color = labelColor.toArgb()
     }
 

@@ -44,32 +44,9 @@ fun ChartLayout() {
     val options = Scale.values().map { stringResource(id = it.stringResId) }
     val selectedTab = remember { mutableStateOf(0) }
     val onItemSelected: (Int) -> Unit = { selectedTab.value = it }
-    val horizontalAxis = when (selectedTab.value) {
-        Scale.DAY.ordinal -> Axis(
-            max = 24,//Hour
-            skipRate = 6
-        )
-        Scale.WEEK.ordinal -> Axis(
-            max = 7,
-            skipRate = 1
-        )
-        Scale.MONTH.ordinal -> Axis(
-            max = 30,
-            skipRate = 7
-        )
-        else -> throw NotImplementedError(
-            "This scale is not handled check its ordinal ${selectedTab.value}"
-        )
-    }
-
-    val maxTasksCount = when (selectedTab.value) {
-        Scale.DAY.ordinal -> 20
-        Scale.WEEK.ordinal -> 80
-        Scale.MONTH.ordinal -> 100
-        else -> throw NotImplementedError(
-            "This scale is not handled check its ordinal ${selectedTab.value}"
-        )
-    }
+    val value = selectedTab.value
+    val horizontalAxis = value.axis()
+    val maxTasksCount = value.maxTasksCounter()
 
     val verticalAxis = if (maxTasksCount > 10) {
         Axis(max = 100, skipRate = 5)
