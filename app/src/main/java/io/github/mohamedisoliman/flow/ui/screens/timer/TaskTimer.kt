@@ -10,7 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,7 +22,6 @@ import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.screens.home.TaskTag
 import io.github.mohamedisoliman.flow.ui.theme.Figma
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-
 
 const val interval = 1000
 
@@ -169,7 +169,7 @@ private fun CircleButton(
         onClick = onClick
     ) {
         Icon(
-            painter = painterResource(id = id),
+            imageVector = ImageVector.vectorResource(id = id),
             contentDescription = ""
         )
     }
@@ -206,7 +206,7 @@ private fun PinToggle(
     IconToggleButton(
         checked = checked, onCheckedChange = onChecked) {
         Icon(
-            painter = painterResource(id = if (checked) R.drawable.pin_filled else R.drawable.pin_outlined),
+            imageVector = ImageVector.vectorResource(id = if (checked) R.drawable.pin_filled else R.drawable.pin_outlined),
             contentDescription = ""
         )
     }

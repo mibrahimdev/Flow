@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
@@ -25,11 +25,10 @@ import androidx.navigation.compose.*
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.fake.currentTask
 import io.github.mohamedisoliman.flow.fake.tasks
-import io.github.mohamedisoliman.flow.ui.screens.timer.TaskTimer
 import io.github.mohamedisoliman.flow.ui.screens.home.HomeScreen
 import io.github.mohamedisoliman.flow.ui.screens.report.ReportScreen
+import io.github.mohamedisoliman.flow.ui.screens.timer.TaskTimer
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-
 
 @Composable
 fun AppNavigation(
@@ -123,7 +122,7 @@ fun AppBottomBar(
                     Icon(
                         modifier = modifier,
                         tint = tint,
-                        painter = painterResource(R.drawable.time_filled),
+                        imageVector = ImageVector.vectorResource(R.drawable.time_filled),
                         contentDescription = "",
                     )
                 })
@@ -140,7 +139,7 @@ fun AppBottomBar(
                     Icon(
                         modifier = modifier,
                         tint = tint,
-                        painter = painterResource(R.drawable.pie_char_filled),
+                        imageVector = ImageVector.vectorResource(R.drawable.pie_char_filled),
                         contentDescription = "",
                     )
                 })

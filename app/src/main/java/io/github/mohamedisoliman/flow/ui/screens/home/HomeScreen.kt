@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalAnimationGraphicsApi::class)
+
 package io.github.mohamedisoliman.flow.ui.screens.home
 
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,9 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,20 +59,17 @@ fun HomeScreen(
             CurrentTaskCard(task = currentTask, onClick = { onTaskClicked(currentTaskState) })
         }
         item {
-            SectionHead(
-                title = stringResource(R.string.today),
-                endItem = {
-                    TextButton(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
+            SectionHead(title = stringResource(R.string.today), endItem = {
+                TextButton(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
+                ) {
+                    Text(
+                        text = stringResource(R.string.see_all),
+                        style = MaterialTheme.typography.subtitle1
+                    )
                 }
-            )
+            })
         }
 
         tasks.take(4).forEach {
@@ -85,7 +86,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
     SectionHead(modifier = modifier, endItem = {
         IconButton(modifier = Modifier.size(24.dp), onClick = onClick) {
             Icon(
-                painter = painterResource(id = R.drawable.more),
+                imageVector = ImageVector.vectorResource(id = R.drawable.more),
                 contentDescription = ""
             )
         }
@@ -102,8 +103,7 @@ fun TaskCard(
         modifier = modifier
             .height(90.dp)
             .fillMaxWidth()
-            .clickable { onTaskClicked(task) }
-    ) {
+            .clickable { onTaskClicked(task) }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,8 +111,10 @@ fun TaskCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 ProjectImage(modifier = Modifier.padding(end = 16.dp), task)
 
                 Column(
@@ -135,7 +137,7 @@ fun TaskCard(
 @Composable
 private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
     Image(
-        painter = painterResource(task.project.icon),
+        imageVector = ImageVector.vectorResource(task.project.icon),
         contentDescription = "avatar",
         contentScale = ContentScale.Inside,
         modifier = modifier
@@ -158,7 +160,10 @@ private fun StartTask(
     ) {
         Text(text = task.time)
         IconButton(onClick = onClick) {
-            Icon(painter = painterResource(id = R.drawable.play), contentDescription = "")
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.play),
+                contentDescription = ""
+            )
         }
     }
 }
@@ -169,8 +174,7 @@ private fun TagsRow(
     tags: List<TaskTag> = emptyList(),
 ) {
     LazyRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         tags.forEach { tag ->
             item {
@@ -180,26 +184,25 @@ private fun TagsRow(
     }
 }
 
-
 @Composable
 fun SectionHead(
     modifier: Modifier = Modifier,
     title: String = "Task",
     endItem: @Composable () -> Unit = {},
 ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .then(modifier),
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.h4.copy(fontSize = 24.sp)
+            text = title, style = MaterialTheme.typography.h4.copy(fontSize = 24.sp)
         )
         endItem()
     }
 }
-
 
 @Composable
 fun CurrentTaskCard(
@@ -212,16 +215,16 @@ fun CurrentTaskCard(
     CardSurface(modifier = Modifier
         .wrapContentHeight()
         .then(modifier)
-        .clickable { onClick(taskSate) }
-    ) {
-        Column(modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.SpaceAround) {
+        .clickable { onClick(taskSate) }) {
+        Column(
+            modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
             TaskView(task.time) {
 
             }
             ProjectView(
-                projectName = task.project.name,
-                projectTint = task.project.color
+                projectName = task.project.name, projectTint = task.project.color
             )
 
         }
@@ -229,6 +232,7 @@ fun CurrentTaskCard(
 
 }
 
+@ExperimentalAnimationGraphicsApi
 @Composable
 private fun TaskView(taskTimer: String, onClick: () -> Unit) {
     Row(
@@ -237,18 +241,17 @@ private fun TaskView(taskTimer: String, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = taskTimer,
-            style = MaterialTheme.typography.h4
+            text = taskTimer, style = MaterialTheme.typography.h4
         )
         IconButton(onClick = onClick) {
-            Icon(modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.arrow),
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.arrow),
                 contentDescription = ""
             )
         }
     }
 }
-
 
 data class Task(
     val name: String = "",
@@ -267,5 +270,4 @@ data class Project(
     val name: String = "",
     val color: Color = Color.Transparent,
     val icon: Int = R.drawable.desktop,
-) {
-}
+)
