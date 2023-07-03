@@ -23,6 +23,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
 import io.github.mohamedisoliman.flow.R
+import io.github.mohamedisoliman.flow.R.string.home
 import io.github.mohamedisoliman.flow.fake.currentTask
 import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.screens.home.HomeScreen
@@ -77,7 +78,7 @@ private fun @Composable NavGraphBuilder.homeComposable(navController: NavHostCon
 }
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int) {
-    object Home : Screen("home", R.string.home)
+    object Home : Screen("home", home)
     object Report : Screen("report", R.string.report)
     object TaskTimer : Screen("Current_task", R.string.current_task)
 }
@@ -166,14 +167,14 @@ fun AnimatableIcon(
         animationSpec = TweenSpec(
             durationMillis = 2000,
             easing = FastOutSlowInEasing
-        )
+        ), label = ""
     )
     val animatedColor by animateColorAsState(
         targetValue = color,
         animationSpec = TweenSpec(
             durationMillis = 2000,
             easing = FastOutSlowInEasing
-        )
+        ), label = ""
     )
 
     IconButton(

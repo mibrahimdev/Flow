@@ -2,15 +2,28 @@ package io.github.mohamedisoliman.flow.ui.screens.report
 
 import android.graphics.Paint
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TabPosition
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -20,14 +33,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PointMode
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.mohamedisoliman.flow.ui.theme.Figma
-
 
 data class Axis(
     val max: Int = 1,
@@ -103,17 +119,17 @@ fun LineChart(
             val verticalLabelWidth = canvasHeight / verticalAxis.labels.size
 
             horizontalAxis.labels.forEachIndexed { xIndex, xLabel ->
-//                if (xIndex != 0 && xIndex % horizontalAxis.skipRate == 0) {
-//                    val currentX = xIndex * horizontalLabelWidth
-//                    canvas.nativeCanvas.drawText(xLabel, currentX, canvasHeight, textPaint)
-//                }
+                if (xIndex != 0 && xIndex % horizontalAxis.skipRate == 0) {
+                    val currentX = xIndex * horizontalLabelWidth
+                    canvas.nativeCanvas.drawText(xLabel, currentX, canvasHeight, textPaint)
+                }
             }
 
             verticalAxis.labels.forEachIndexed { yIndex, yLabel ->
-//                if (yIndex != 0 && yIndex % verticalAxis.skipRate == 0) {
-//                    val currentY = yIndex * verticalLabelWidth
-//                    canvas.nativeCanvas.drawText(yLabel, bounds, canvasHeight - currentY, textPaint)
-//                }
+                if (yIndex != 0 && yIndex % verticalAxis.skipRate == 0) {
+                    val currentY = yIndex * verticalLabelWidth
+                    canvas.nativeCanvas.drawText(yLabel, bounds, canvasHeight - currentY, textPaint)
+                }
             }
 
 
