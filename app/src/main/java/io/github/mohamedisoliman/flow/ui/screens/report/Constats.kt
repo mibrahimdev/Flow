@@ -28,7 +28,6 @@ fun Int.axis() = when (this) {
 fun Int.maxTasksCounter() = when (this) {
     Scale.DAY.ordinal -> 20
     Scale.WEEK.ordinal -> 80
-    Scale.MONTH.ordinal -> 100
     else -> throw NotImplementedError(
         "This scale is not handled check its ordinal $this"
     )

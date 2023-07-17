@@ -59,16 +59,11 @@ fun PreviewLineChart() {
     val verticalLabels = (0 until 10).map { it.toString() }
 
     val points = mapOf(
-        Pair(1f, 5f),
-        Pair(2f, 4f),
-        Pair(3f, 2f),
-        Pair(4f, 7f),
-        Pair(5f, 2.2f),
-        Pair(6.3f, 3.5f),
-        Pair(7.4f, 6f),
-        Pair(8.5f, 4f),
-        Pair(8f, 9f),
-        Pair(9f, 1f)
+        10f to 1f,
+        11f to .25f,
+        12f to .5f,
+        16f to .5f,
+        18f to 2f,
     )
 
     LineChart(
@@ -145,7 +140,6 @@ fun LineChart(
                 cap = StrokeCap.Round
             )
 
-
             val trianglePath = Path().apply {
                 points.map { entry ->
                     val xOffset = entry.key * horizontalLabelWidth
@@ -156,16 +150,28 @@ fun LineChart(
 
                     val start = list[0]
                     val end = list[1]
+
                     moveTo(start.first, start.second)
                     lineTo(end.first, end.second)
                 }
             }
 
+//            for (i in 1 until yData.size) {
+//                val prevX = (i - 1) * xStep
+//                val prevY = size.height - yData[i - 1] * yStep
+//                val x = i * xStep
+//                val y = size.height - yData[i] * yStep
+//                val cX1 = prevX + xStep / 2
+//                val cY1 = prevY
+//                val cX2 = x - xStep / 2
+//                val cY2 = y
+//                path.cubicTo(cX1, cY1, cX2, cY2, x, y)
+//            }
+//            drawPath(path, Color.Blue, style = Stroke(width = 10f))
+
 
             drawPath(
-                path = trianglePath,
-                color = pointColor,
-                style = Stroke(width = 4f)
+                path = trianglePath, color = pointColor, style = Stroke(width = 4f)
             )
 
         }
@@ -179,33 +185,26 @@ fun ChartScaleSelector(
     options: List<String>,
     onItemSelected: (Int) -> Unit,
 ) {
-    TabRow(
-        modifier = Modifier
-            .wrapContentSize()
-            .clip(RoundedCornerShape(24.dp))
-            .background(MaterialTheme.colors.surface)
-            .padding(8.dp)
-            .selectableGroup(),
+    TabRow(modifier = Modifier
+        .wrapContentSize()
+        .clip(RoundedCornerShape(24.dp))
+        .background(MaterialTheme.colors.surface)
+        .padding(8.dp)
+        .selectableGroup(),
         selectedTabIndex = selectedTab.value,
         backgroundColor = MaterialTheme.colors.surface,
         divider = { TabRowDefaults.Divider(thickness = 0.dp) },
         indicator = { tabPositions ->
             TabIndicator(tabPositions, selectedTab.value, options[selectedTab.value])
-        }
-    ) {
+        }) {
 
         options.forEachIndexed { index, title ->
-            Tab(
-                title = title,
-                onClick = { onItemSelected(index) }
-            )
+            Tab(title = title, onClick = { onItemSelected(index) })
 
         }
-
 
     }
 }
-
 
 @Composable
 private fun TabIndicator(
@@ -217,14 +216,12 @@ private fun TabIndicator(
 
     val indicatorLeft by transition.animateDp(
         label = "Indicator left",
-        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }
-    ) { page ->
+        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }) { page ->
         tabPositions[page].left
     }
     val indicatorRight by transition.animateDp(
         label = "Indicator right",
-        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }
-    ) { page ->
+        transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }) { page ->
         tabPositions[page].right
     }
     val color by transition.animateColor(
@@ -252,7 +249,6 @@ private fun TabIndicator(
     )
 }
 
-
 @Composable
 fun Tab(
     modifier: Modifier = Modifier,
@@ -262,14 +258,14 @@ fun Tab(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    Text(
-        modifier = modifier
-            .clickable(interactionSource = interactionSource, indication = null) { onClick() }
-            .wrapContentSize()
-            .padding(horizontal = 24.dp, vertical = 8.dp),
+    Text(modifier = modifier
+        .clickable(
+            interactionSource = interactionSource, indication = null
+        ) { onClick() }
+        .wrapContentSize()
+        .padding(horizontal = 24.dp, vertical = 8.dp),
         text = title,
-        style = MaterialTheme.typography.subtitle1.copy(fontSize = textSize.sp)
-    )
+        style = MaterialTheme.typography.subtitle1.copy(fontSize = textSize.sp))
 }
 
 
