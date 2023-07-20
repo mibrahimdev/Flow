@@ -37,8 +37,7 @@ fun AppNavigation(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController,
-        startDestination = Screen.Report.route,//TODO: testing
+        navController = navController, startDestination = Screen.Report.route,//TODO: testing
         modifier = modifier
     ) {
         homeComposable(navController)
@@ -48,7 +47,6 @@ fun AppNavigation(
         taskTimer(navController)
     }
 
-
 }
 
 private fun @Composable NavGraphBuilder.report(navController: NavHostController) {
@@ -56,7 +54,6 @@ private fun @Composable NavGraphBuilder.report(navController: NavHostController)
         ReportScreen()
     }
 }
-
 
 @OptIn(ObsoleteCoroutinesApi::class)
 private fun @Composable NavGraphBuilder.taskTimer(navController: NavHostController) {
@@ -77,7 +74,11 @@ private fun @Composable NavGraphBuilder.homeComposable(navController: NavHostCon
     }
 }
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int) {
+sealed class Screen(
+    val route: String,
+    @StringRes
+    val resourceId: Int
+) {
     object Home : Screen("home", home)
     object Report : Screen("report", R.string.report)
     object TaskTimer : Screen("Current_task", R.string.current_task)
@@ -94,12 +95,10 @@ fun AppBottomBar(
     val currentDestination = navBackStackEntry?.destination
 
     AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically(
+        visible = visible, enter = slideInVertically(
             initialOffsetY = { fullHeight -> fullHeight },
             animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
-        ),
-        exit = slideOutVertically(
+        ), exit = slideOutVertically(
             targetOffsetY = { fullHeight -> fullHeight },
             animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
         )
@@ -115,8 +114,8 @@ fun AppBottomBar(
             backgroundColor = MaterialTheme.colors.primarySurface,
         ) {
 
-
-            NavigationItem(currentDestination,
+            NavigationItem(
+                currentDestination,
                 Screen.Home,
                 navController,
                 icon = { modifier, tint ->
@@ -128,14 +127,15 @@ fun AppBottomBar(
                     )
                 })
 
-            FloatingActionButton(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                onClick = { /*TODO*/ }
-            ) {
+            FloatingActionButton(modifier = Modifier.align(Alignment.CenterVertically),
+                onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "")
             }
 
-            NavigationItem(currentDestination, Screen.Report, navController,
+            NavigationItem(
+                currentDestination,
+                Screen.Report,
+                navController,
                 icon = { modifier, tint ->
                     Icon(
                         modifier = modifier,
@@ -147,7 +147,6 @@ fun AppBottomBar(
         }
 
     }
-
 
 }
 
@@ -165,21 +164,17 @@ fun AnimatableIcon(
         targetValue = scale,
         // Here the animation spec serves no purpose but to demonstrate in slow speed.
         animationSpec = TweenSpec(
-            durationMillis = 2000,
-            easing = FastOutSlowInEasing
+            durationMillis = 2000, easing = FastOutSlowInEasing
         ), label = ""
     )
     val animatedColor by animateColorAsState(
-        targetValue = color,
-        animationSpec = TweenSpec(
-            durationMillis = 2000,
-            easing = FastOutSlowInEasing
+        targetValue = color, animationSpec = TweenSpec(
+            durationMillis = 2000, easing = FastOutSlowInEasing
         ), label = ""
     )
 
     IconButton(
-        onClick = onClick,
-        modifier = modifier.size(iconSize)
+        onClick = onClick, modifier = modifier.size(iconSize)
     ) {
         Icon(
             imageVector = imageVector,
@@ -189,7 +184,6 @@ fun AnimatableIcon(
         )
     }
 }
-
 
 @Composable
 private fun RowScope.NavigationItem(
@@ -203,40 +197,34 @@ private fun RowScope.NavigationItem(
     val targetScale = if (selected) 1.1f else 1f
     val targetColor = if (selected) MaterialTheme.colors.onSurface else Color.LightGray
 
-
     // Animation params
     val animatedScale: Float by animateFloatAsState(
         targetValue = targetScale,
         // Here the animation spec serves no purpose but to demonstrate in slow speed.
         animationSpec = TweenSpec(
-            durationMillis = 200,
-            easing = FastOutSlowInEasing
+            durationMillis = 200, easing = FastOutSlowInEasing
         )
     )
     val animatedColor by animateColorAsState(
-        targetValue = targetColor,
-        animationSpec = TweenSpec(
-            durationMillis = 200,
-            easing = FastOutSlowInEasing
+        targetValue = targetColor, animationSpec = TweenSpec(
+            durationMillis = 200, easing = FastOutSlowInEasing
         )
     )
 
     BottomNavigationItem(icon = {
         icon(modifier = Modifier.scale(animatedScale), tint = animatedColor)
-    },
-        selected = selected,
-        onClick = {
-            navController.navigate(screen.route) {
-                // Pop up to the start destination of the graph to
-                // avoid building up a large stack of destinations
-                // on the back stack as users select items
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
+    }, selected = selected, onClick = {
+        navController.navigate(screen.route) {
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            // on the back stack as users select items
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
             }
+            launchSingleTop = true
+            restoreState = true
         }
+    }
 
     )
 }
