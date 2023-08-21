@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabPosition
 import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -39,19 +38,19 @@ data class Axis(
     val labels: List<String> = emptyList(),
 )
 
-@Preview()
+@Preview
 @Composable
 fun PreviewLineChart() {
 
     val points = mapOf(
-        10f to 60f,
+        10f to 7.6f,
         11f to 15f,
-        12f to 15f,
+        12f to 9f,
         16f to 2.5f,
         18f to 2f,
     )
 
-    CustomBezierChart(
+    BezierChart(
         data = points, modifier = Modifier.fillMaxSize()
     )
 }
@@ -64,13 +63,13 @@ fun ChartScaleSelector(
 ) {
     TabRow(modifier = Modifier
         .wrapContentSize()
-        .clip(RoundedCornerShape(24.dp))
+        .clip(RoundedCornerShape(8.dp))
         .background(MaterialTheme.colors.surface)
         .padding(8.dp)
         .selectableGroup(),
         selectedTabIndex = selectedTab.value,
         backgroundColor = MaterialTheme.colors.surface,
-        divider = { TabRowDefaults.Divider(thickness = 0.dp) },
+        divider = { },
         indicator = { tabPositions ->
             TabIndicator(tabPositions, selectedTab.value, options[selectedTab.value])
         }) {
@@ -91,22 +90,23 @@ private fun TabIndicator(
 ) {
     val transition = updateTransition(tabPage, label = "Tab indicator")
 
-    val indicatorLeft by transition.animateDp(label = "Indicator left",
+    val indicatorLeft by transition.animateDp(
+        label = "Indicator left",
         transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }) { page ->
         tabPositions[page].left
     }
-    val indicatorRight by transition.animateDp(label = "Indicator right",
+    val indicatorRight by transition.animateDp(
+        label = "Indicator right",
         transitionSpec = { spring(stiffness = Spring.StiffnessMedium) }) { page ->
         tabPositions[page].right
     }
     val color by transition.animateColor(
         label = "Background color"
     ) { page ->
-        if (page == tabPage) MaterialTheme.colors.onSecondary else MaterialTheme.colors.surface
+        if (page == tabPage) MaterialTheme.colors.onSecondary else MaterialTheme.colors.background
     }
 
-    val alpha = transition.animateFloat(
-        label = "text alpha",
+    val alpha = transition.animateFloat(label = "text alpha",
         transitionSpec = { spring(stiffness = Spring.StiffnessVeryLow) }) { page ->
         if (page == tabPage) 1f else 0f
     }
@@ -118,7 +118,7 @@ private fun TabIndicator(
             .wrapContentSize(align = Alignment.CenterStart)
             .offset(x = indicatorLeft)
             .width(indicatorRight - indicatorLeft)
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(8.dp))
             .fillMaxSize()
             .background(color),
         title = title,

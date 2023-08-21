@@ -60,17 +60,6 @@ fun ChartLayout() {
     val options = Scale.values().map { stringResource(id = it.stringResId) }
     val selectedTab = remember { mutableStateOf(0) }
     val onItemSelected: (Int) -> Unit = { selectedTab.value = it }
-    val value = selectedTab.value
-    val horizontalAxis = value.axis()
-    val maxTasksCount = value.maxTasksCounter()
-
-    val verticalAxis = if (maxTasksCount > 10) {
-        Axis(max = 100, skipRate = 5)
-    } else if (maxTasksCount > 100) {
-        Axis(max = 100, skipRate = 4)
-    } else {
-        Axis(max = 50, skipRate = 5)
-    }
 
 
     Column(
@@ -88,20 +77,20 @@ fun ChartLayout() {
                 .height(20.dp)
         )
 
-        val horizontalLabels = (0 until horizontalAxis.max).map { it.toString() }
-        val verticalLabels = (0 until verticalAxis.max).map { it.toString() }
+        val data = mapOf(
+            Pair(13f, 2f),
+            Pair(14f, 4f),
+            Pair(15f, 2.4f),
+            Pair(16f, 1f),
+            Pair(19f, 2f),
+            Pair(20f, 0.25f)
+        )
 
-        val points = mapOf(
-            1f to 5f,
-            2f to 4f,
-            3f to 2f,
-            4f to 7f,
-            5f to 2.2f,
-            6.3f to 3.5f,
-            7.4f to 6f,
-            8.5f to 4f,
-            8f to 9f,
-            9f to 1f
+        BezierChart(
+            data = data, modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+//                .height(500.dp)
         )
 
     }
@@ -140,15 +129,13 @@ private fun SummeryLayout() {
                 append("1")
                 withStyle(
                     style = SpanStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Light
+                        fontSize = 14.sp, fontWeight = FontWeight.Light
                     )
                 ) { append("h ") }
                 append("44")
                 withStyle(
                     style = SpanStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Light
+                        fontSize = 14.sp, fontWeight = FontWeight.Light
                     )
                 ) { append("m ") }
             },

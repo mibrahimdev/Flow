@@ -2,11 +2,16 @@ package io.github.mohamedisoliman.flow.ui.screens.report
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -15,6 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -35,10 +41,10 @@ fun PrevCustomBezier() {
         Pair(20f, 0.25f)
     )
 
-    CustomBezierChart(
+    BezierChart(
         data = data, modifier = Modifier
             .fillMaxWidth()
-            .height(800.dp) //todo: revisit
+            .height(500.dp) //todo: revisit
     )
 }
 
@@ -47,28 +53,26 @@ fun PrevCustomBezier() {
 fun PrevChartTwo() {
 
     val points = mapOf(
-        10f to 60f,
-        11f to 15f,
-        12f to 15f,
+        10f to 9f,
+        11f to 3.5f,
+        12f to 4f,
         16f to 2.5f,
         18f to 2f,
     )
 
-    CustomBezierChart(
+    BezierChart(
         data = points, modifier = Modifier
             .fillMaxWidth()
-            .height(800.dp) //todo: revisit
+            .height(500.dp) //todo: revisit
     )
 }
 
 @Composable
-fun CustomBezierChart(
+fun BezierChart(
     modifier: Modifier = Modifier,
     data: Map<Float, Float> = emptyMap(),
     lineColor: Color = Purple500,
     lineWidth: Dp = 30.dp,
-    maxLevels: Int = 5,
-    scale: Int = 1
 ) {
 
     val spacing = 100f
@@ -78,15 +82,15 @@ fun CustomBezierChart(
     val yUpperValue = remember { (yMax?.plus(1))?.roundToInt() ?: 0 }
     val yLowerValue = remember { (yMin?.toInt() ?: 0) }
 
-    val yUnitStep = data.values.toList().calculateUnitStep() ?: 1f
-
     val density = LocalDensity.current
 
     var (xMaxPoint, yMaxPoint) = 0f to 0f
 
+    val colors = MaterialTheme.colors
+
     val textPaint = remember(density) {
         Paint().apply {
-            color = android.graphics.Color.WHITE
+            color = colors.onSecondary.toArgb()
             textAlign = Paint.Align.CENTER
             textSize = density.run { 12.sp.toPx() }
         }
@@ -96,7 +100,18 @@ fun CustomBezierChart(
     val verticalDashPathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 30f), 0f)
 
 
-    Canvas(modifier = modifier) {
+    Canvas(
+        modifier = modifier.then(
+            Modifier
+
+                .background(
+                    colors.surface,
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .clip(RoundedCornerShape(16.dp))
+
+        ).padding(24.dp)
+    ) {
 
         val spacePerHour = (size.width - spacing) / data.size
 
@@ -112,25 +127,22 @@ fun CustomBezierChart(
             if (entry.value == yMax) xMaxPoint = xLabel
         }
 
-        val priceStep = (yUpperValue - yLowerValue) / maxLevels.toFloat()
-        val step = yUpperValue / yUnitStep
+        val levels = (size.height / (yUpperValue - yLowerValue)).roundToInt()
+
         //y-labels
-        (0 until maxLevels).forEach { i ->
+        for (i in 0 until yUpperValue) {
+            val yLevel = size.height - spacing - i * levels
+            val yText = i * levels * (yUpperValue - yLowerValue).toFloat() / size.height
+
             drawContext.canvas.nativeCanvas.apply {
-                val yLevel = size.height - spacing - i * size.height / maxLevels //
-
-                drawText(
-                    (yLowerValue + step * i).roundToInt().toString(), 30f, yLevel, textPaint
-                )
-
+                drawText(yText.roundToInt().toString(), 30f, yLevel, textPaint)
 
                 drawLine(
                     color = Color.LightGray,
-                    start = Offset(60f, yLevel),
-                    end = Offset(height - spacing, yLevel),
+                    start = Offset(spacing, yLevel),
+                    end = Offset(width - spacing, yLevel),
                     pathEffect = horizontalDashPathEffect
                 )
-
             }
         }
 
@@ -142,14 +154,14 @@ fun CustomBezierChart(
             hourValues.forEachIndexed { index, (_, value) ->
                 val x = spacing + index * spacePerHour
                 val y =
-                    height - spacing - ((value - yLowerValue) / (yUpperValue - yLowerValue) * height)
+                    height - spacing - (size.height * value / yUpperValue) // Px = PxMax * value / ValueMax
 
                 if (index == 0) {
                     moveTo(x, y)
                 } else {
                     val prevX = spacing + (index - 1) * spacePerHour
                     val prevY =
-                        height - spacing - ((hourValues[index - 1].value - yLowerValue) / (yUpperValue - yLowerValue) * height).toFloat()
+                        height - spacing - (size.height * hourValues[index - 1].value / yUpperValue)
 
                     val cX1 = prevX + spacePerHour / 2
                     val cX2 = x - spacePerHour / 2
@@ -167,13 +179,13 @@ fun CustomBezierChart(
         val rectWidth = 200f
 
         val roadGradient = Brush.linearGradient(
-            colors = listOf(Color.White, lineColor),
+            colors = listOf(Color.White,Color.White, Color.Black),
             end = Offset(xMaxPoint, yMaxPoint + lineWidth.value),
             start = Offset(xMaxPoint, size.height - spacing),
         )
 
         val linearGradient = Brush.horizontalGradient(
-            colors = listOf(lineColor, lineColor, Color.White),
+            colors = listOf(lineColor, lineColor.copy(alpha = 0.5f), Color.White),
             startX = 0f,
         )
 
