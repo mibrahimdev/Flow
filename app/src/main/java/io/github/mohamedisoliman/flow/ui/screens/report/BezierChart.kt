@@ -3,8 +3,6 @@ package io.github.mohamedisoliman.flow.ui.screens.report
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -22,50 +20,13 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.mohamedisoliman.flow.ui.theme.Grey
 import io.github.mohamedisoliman.flow.ui.theme.Purple500
+import io.github.mohamedisoliman.flow.ui.theme.roadGradientColor
 import kotlin.math.roundToInt
-
-@Preview
-@Composable
-fun PrevCustomBezier() {
-    val data = mapOf(
-        Pair(13f, 2f),
-        Pair(14f, 4f),
-        Pair(15f, 2.4f),
-        Pair(16f, 1f),
-        Pair(19f, 2f),
-        Pair(20f, 0.25f)
-    )
-
-    BezierChart(
-        data = data, modifier = Modifier
-            .fillMaxWidth()
-            .height(500.dp) //todo: revisit
-    )
-}
-
-@Preview
-@Composable
-fun PrevChartTwo() {
-
-    val points = mapOf(
-        10f to 9f,
-        11f to 3.5f,
-        12f to 4f,
-        16f to 2.5f,
-        18f to 2f,
-    )
-
-    BezierChart(
-        data = points, modifier = Modifier
-            .fillMaxWidth()
-            .height(500.dp) //todo: revisit
-    )
-}
 
 @Composable
 fun BezierChart(
@@ -88,9 +49,11 @@ fun BezierChart(
 
     val colors = MaterialTheme.colors
 
+    val textColor = colors.Grey.toArgb()
+
     val textPaint = remember(density) {
         Paint().apply {
-            color = colors.onSecondary.toArgb()
+            color = textColor
             textAlign = Paint.Align.CENTER
             textSize = density.run { 12.sp.toPx() }
         }
@@ -153,8 +116,7 @@ fun BezierChart(
 
             hourValues.forEachIndexed { index, (_, value) ->
                 val x = spacing + index * spacePerHour
-                val y =
-                    height - spacing - (size.height * value / yUpperValue) // Px = PxMax * value / ValueMax
+                val y = height - spacing - (size.height * value / yUpperValue) // Px = PxMax * value / ValueMax
 
                 if (index == 0) {
                     moveTo(x, y)
@@ -179,9 +141,9 @@ fun BezierChart(
         val rectWidth = 200f
 
         val roadGradient = Brush.linearGradient(
-            colors = listOf(Color.White,Color.White, Color.Black),
-            end = Offset(xMaxPoint, yMaxPoint + lineWidth.value),
-            start = Offset(xMaxPoint, size.height - spacing),
+            colors = listOf(Color.White, colors.roadGradientColor),
+            start = Offset(xMaxPoint, yMaxPoint + lineWidth.value),
+            end = Offset(xMaxPoint, size.height - spacing),
         )
 
         val linearGradient = Brush.horizontalGradient(
@@ -226,19 +188,3 @@ fun BezierChart(
     }
 
 }
-
-fun List<Float>.calculateUnitStep(): Float? {
-    if (size < 2) return null
-
-    val sortedNumbers = sorted()
-    var unitStep: Float? = null
-
-    for (i in 1 until sortedNumbers.size) {
-        val diff = sortedNumbers[i] - sortedNumbers[i - 1]
-        if (diff != 0f && (unitStep == null || diff < unitStep)) unitStep = diff
-    }
-
-    return unitStep
-}
-
-

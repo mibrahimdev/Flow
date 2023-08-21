@@ -90,7 +90,6 @@ fun ChartLayout() {
             data = data, modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-//                .height(500.dp)
         )
 
     }

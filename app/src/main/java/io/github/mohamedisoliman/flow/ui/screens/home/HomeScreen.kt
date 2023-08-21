@@ -44,7 +44,7 @@ import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
 import io.github.mohamedisoliman.flow.ui.ProjectView
 import io.github.mohamedisoliman.flow.ui.TagView
-import io.github.mohamedisoliman.flow.ui.theme.ArrowColor
+import io.github.mohamedisoliman.flow.ui.theme.Grey
 
 @Preview(showBackground = true)
 @Composable
@@ -176,7 +176,7 @@ private fun StartTask(
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.play),
-                tint = MaterialTheme.colors.ArrowColor,
+                tint = MaterialTheme.colors.Grey,
                 contentDescription = ""
             )
         }
