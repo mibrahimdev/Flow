@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +33,7 @@ fun CardSurface(
         modifier = modifier,
         color = MaterialTheme.colors.primarySurface,
         shape = shape,
-        elevation = 4.dp
+        elevation = 0.dp
     ) {
         content()
     }
@@ -48,7 +53,9 @@ fun TagView(
             BorderStroke(width = 1.dp, color = tagColor)
         else
             null
+
     val textColor = MaterialTheme.colors.contentColorFor(tagColor)
+
     Surface(modifier = modifier,
         color = if (tagStyle == TagStyle.Background) tagColor.copy(alpha = 0.2f) else
             MaterialTheme.colors.surface,

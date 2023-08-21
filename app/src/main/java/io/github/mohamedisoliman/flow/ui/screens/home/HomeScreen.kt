@@ -3,11 +3,27 @@ package io.github.mohamedisoliman.flow.ui.screens.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +44,7 @@ import io.github.mohamedisoliman.flow.fake.tasks
 import io.github.mohamedisoliman.flow.ui.CardSurface
 import io.github.mohamedisoliman.flow.ui.ProjectView
 import io.github.mohamedisoliman.flow.ui.TagView
+import io.github.mohamedisoliman.flow.ui.theme.ArrowColor
 
 @Preview(showBackground = true)
 @Composable
@@ -69,7 +86,7 @@ fun HomeScreen(
             })
         }
 
-        tasks.take(4).forEach {
+        tasks.take(50).forEach {
             item {
                 TaskCard(task = it, onTaskClicked = onTaskClicked)
             }
@@ -159,6 +176,7 @@ private fun StartTask(
         IconButton(onClick = onClick) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.play),
+                tint = MaterialTheme.colors.ArrowColor,
                 contentDescription = ""
             )
         }
@@ -217,9 +235,7 @@ fun CurrentTaskCard(
             modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            TaskView(task.time) {
-
-            }
+            TopTaskView(task.time) { }
             ProjectView(
                 projectName = task.project.name, projectTint = task.project.color
             )
@@ -231,7 +247,7 @@ fun CurrentTaskCard(
 
 
 @Composable
-private fun TaskView(taskTimer: String, onClick: () -> Unit) {
+private fun TopTaskView(taskTimer: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
