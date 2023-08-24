@@ -1,77 +1,96 @@
-package io.github.mohamedisoliman.flow.screens.home
+package io.github.mohamedisoliman.flow.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.Navigator
 import io.github.mohamedisoliman.flow.R
-import io.github.mohamedisoliman.flow.testing.tasks
-import io.github.mohamedisoliman.flow.ui.theme.CardSurface
-import io.github.mohamedisoliman.flow.ui.theme.Figma
+import io.github.mohamedisoliman.flow.fake.currentTask
+import io.github.mohamedisoliman.flow.fake.tasks
+import io.github.mohamedisoliman.flow.ui.CardSurface
+import io.github.mohamedisoliman.flow.ui.ProjectView
+import io.github.mohamedisoliman.flow.ui.TagView
+import io.github.mohamedisoliman.flow.ui.theme.Grey
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewHomeScreen() {
-    Home(data = tasks)
+    HomeScreen(currentTask = currentTask, data = tasks)
 }
 
 @Composable
-fun Home(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     data: List<Task> = emptyList(),
+    currentTask: Task = Task(),
+    onTaskClicked: (Task) -> Unit = {},
 ) {
     val tasks = remember { data }
+    val currentTaskState = remember { currentTask }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(all = 16.dp)
     ) {
         items(1) {
-            HomeTopBar(modifier = Modifier.padding(bottom = 24.dp)) {}
-            CurrentTaskCard()
+            HomeTopBar(modifier = Modifier.padding(bottom = 16.dp)) {}
+            CurrentTaskCard(task = currentTask, onClick = { onTaskClicked(currentTaskState) })
         }
         item {
-            SectionHead(
-                modifier =
-                Modifier.padding(top = 24.dp),
-                title = stringResource(R.string.today),
-                endItem = {
-                    TextButton(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
+            SectionHead(title = stringResource(R.string.today), endItem = {
+                TextButton(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
+                ) {
+                    Text(
+                        text = stringResource(R.string.see_all),
+                        style = MaterialTheme.typography.subtitle1
+                    )
                 }
-            )
+            })
         }
 
-        tasks.forEach { task ->
+        tasks.take(10).forEach {
             item {
-                TaskCard(task)
+                TaskCard(task = it, onTaskClicked = onTaskClicked)
             }
         }
     }
@@ -83,7 +102,7 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
     SectionHead(modifier = modifier, endItem = {
         IconButton(modifier = Modifier.size(24.dp), onClick = onClick) {
             Icon(
-                painter = painterResource(id = R.drawable.more),
+                imageVector = ImageVector.vectorResource(id = R.drawable.more),
                 contentDescription = ""
             )
         }
@@ -91,12 +110,16 @@ private fun HomeTopBar(modifier: Modifier = Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun TaskCard(task: Task = Task()) {
+fun TaskCard(
+    modifier: Modifier = Modifier,
+    task: Task = Task(),
+    onTaskClicked: (Task) -> Unit,
+) {
     CardSurface(
-        modifier = Modifier
-            .height(100.dp)
+        modifier = modifier
+            .height(90.dp)
             .fillMaxWidth()
-    ) {
+            .clickable { onTaskClicked(task) }) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,8 +127,10 @@ fun TaskCard(task: Task = Task()) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 ProjectImage(modifier = Modifier.padding(end = 16.dp), task)
 
                 Column(
@@ -128,18 +153,13 @@ fun TaskCard(task: Task = Task()) {
 @Composable
 private fun ProjectImage(modifier: Modifier = Modifier, task: Task) {
     Image(
-        painter = painterResource(task.project.icon),
+        imageVector = ImageVector.vectorResource(task.project.icon),
         contentDescription = "avatar",
         contentScale = ContentScale.Inside,
         modifier = modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(brush = Brush.verticalGradient(
-                colors = listOf(
-                    task.project.color,
-                    task.project.color.copy(alpha = .4f)
-                )
-            ))
+            .background(color = task.project.color)
     )
 }
 
@@ -156,7 +176,11 @@ private fun StartTask(
     ) {
         Text(text = task.time)
         IconButton(onClick = onClick) {
-            Icon(painter = painterResource(id = R.drawable.play), contentDescription = "")
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.play),
+                tint = MaterialTheme.colors.Grey,
+                contentDescription = ""
+            )
         }
     }
 }
@@ -167,8 +191,7 @@ private fun TagsRow(
     tags: List<TaskTag> = emptyList(),
 ) {
     LazyRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         tags.forEach { tag ->
             item {
@@ -179,53 +202,44 @@ private fun TagsRow(
 }
 
 @Composable
-fun TagView(tagName: String, tagColor: Color) {
-    Surface(color = tagColor.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
-        Text(modifier = Modifier.padding(8.dp),
-            text = tagName,
-            style = MaterialTheme.typography.caption.copy(color = tagColor, fontSize = 12.sp)
-        )
-    }
-}
-
-@Composable
 fun SectionHead(
     modifier: Modifier = Modifier,
     title: String = "Task",
     endItem: @Composable () -> Unit = {},
 ) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .then(modifier),
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically) {
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.h4.copy(fontSize = 24.sp)
+            text = title, style = MaterialTheme.typography.h4.copy(fontSize = 24.sp)
         )
         endItem()
     }
 }
 
-
 @Composable
 fun CurrentTaskCard(
     modifier: Modifier = Modifier,
-    taskTimer: String = "00:32:10",
-    project: String = "Rasion Project",
-    projectTint: Color = Figma.Purple,
-    onClick: () -> Unit = {},
+    task: Task = Task(),
+    onClick: (Task) -> Unit = {},
 ) {
-    CardSurface(modifier = Modifier
+    val taskSate = remember { task }
+
+    CardSurface(modifier = Modifier.semantics { contentDescription = task.name }
         .wrapContentHeight()
         .then(modifier)
-    ) {
-        Column(modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.SpaceAround) {
-            TaskView(taskTimer, onClick)
+        .clickable { onClick(taskSate) }) {
+        Column(
+            modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
+            TopTaskView(task.time) { }
             ProjectView(
-                projectName = project,
-                projectTint = projectTint
+                projectName = task.project.name, projectTint = task.project.color
             )
 
         }
@@ -233,46 +247,24 @@ fun CurrentTaskCard(
 
 }
 
+
 @Composable
-private fun TaskView(taskTimer: String, onClick: () -> Unit) {
+private fun TopTaskView(taskTimer: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = taskTimer,
-            style = MaterialTheme.typography.h4
+            text = taskTimer, style = MaterialTheme.typography.h4
         )
         IconButton(onClick = onClick) {
-            Icon(modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.arrow),
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.arrow),
                 contentDescription = ""
             )
         }
-    }
-}
-
-@Composable
-fun ProjectView(
-    modifier: Modifier = Modifier,
-    projectName: String = "",
-    projectTint: Color = Color.Transparent,
-) {
-    Row(modifier = Modifier
-        .padding(top = 24.dp)
-        .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center) {
-        Icon(
-            modifier = Modifier
-                .padding(end = 12.dp)
-                .size(12.dp),
-            painter = painterResource(R.drawable.eclipse),
-            contentDescription = "",
-            tint = projectTint
-        )
-        Text(text = projectName)
     }
 }
 
@@ -281,7 +273,8 @@ data class Task(
     val time: String = "",
     val project: Project = Project(),
     val tags: List<TaskTag> = emptyList(),
-)
+    val id: Int = -1,
+) : Navigator.Extras
 
 data class TaskTag(
     val name: String = "",
@@ -292,5 +285,4 @@ data class Project(
     val name: String = "",
     val color: Color = Color.Transparent,
     val icon: Int = R.drawable.desktop,
-) {
-}
+)

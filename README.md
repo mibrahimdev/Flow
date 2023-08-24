@@ -1,0 +1,7 @@
+## Flow
+Time tracker app 🕰️ && Jetpack compose learning playground
+
+| Home                                                                                          | Report                                                                                                            | Task timer                                                                                                          |
+|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/home.png" width="200">      | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/report_dark.png" alt="report dark" width="200"> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Current_task.png" alt="Image 3" width="200">      |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/home_dark.png" width="200"> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/report.png" alt="report" width="200">           | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Current_task_dark.png" alt="Image 6" width="200"> |

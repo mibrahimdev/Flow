@@ -7,44 +7,44 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
+private val darkColorPalette = darkColors(
+
+    primaryVariant = Figma.DarkBlack,
 
     primary = Figma.Black,
-    primaryVariant = Figma.DarkBlack,
-    secondary = Figma.Purple,
-
-    background = Figma.DarkBackground,
-    surface = Figma.Black,
+    secondary = Figma.White,
+    background = Figma.Black,
+    surface = Figma.DarkBackground,
 
     onPrimary = Figma.White,
-    onSecondary = Figma.White,
+    onSecondary = Figma.Grey3,
     onBackground = Figma.White,
     onSurface = Figma.White,
 )
 
-private val LightColorPalette = lightColors(
+private val lightColorPalette = lightColors(
+
+    primaryVariant = Figma.White,
 
     primary = Figma.White,
-    primaryVariant = Figma.White,
-    secondary = Figma.Purple,
+    secondary = Figma.DarkBackground,
 
-
-    background = Color.White,
+    background = Figma.LightGrey,
     surface = Figma.Background,
 
     onPrimary = Figma.Black,
-    onSecondary = Figma.DarkBlack,
+    onSecondary = Figma.White,
     onBackground = Color.Black,
     onSurface = Color.Black,
 
-)
+    )
 
 @Composable
-fun FlowTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun FlowTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
-        DarkColorPalette
+        darkColorPalette
     } else {
-        LightColorPalette
+        lightColorPalette
     }
 
     MaterialTheme(
