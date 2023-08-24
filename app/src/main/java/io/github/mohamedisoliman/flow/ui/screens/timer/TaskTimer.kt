@@ -68,8 +68,9 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
     val taskState = remember { task }
     val tag = taskState?.tags?.firstOrNull()
 
-    val targetTime = 60L * 3
-    val lastPause = 60L * 2
+    val targetTime = 40L
+    val lastPause = 38L
+
     val tick = remember { mutableLongStateOf(lastPause) }
 
     startTimer(targetTime, lastPause) {
