@@ -38,7 +38,12 @@ platform :android do
 
 
   platform :android do
-    lane :generateScreenshots do
+    lane :screenshots do
+
+    gradle(
+        task: 'clean'
+    )
+
       gradle(
         task: 'assemble assembleAndroidTest'
       )
@@ -47,9 +52,11 @@ platform :android do
       test_apk_path = Dir.glob("../**/*-debug-androidTest.apk").first
 
       screengrab(
-        app_package_name: 'io.github.mohamedisoliman.flow',
+        locales: ["en-US"],
+        use_timestamp_suffix: false,
+        clear_previous_screenshots: true,
         app_apk_path: File.absolute_path(apk_path),
-        tests_apk_path:  File.absolute_path(test_apk_path)
+        tests_apk_path: File.absolute_path(test_apk_path)
       )
     end
   end
