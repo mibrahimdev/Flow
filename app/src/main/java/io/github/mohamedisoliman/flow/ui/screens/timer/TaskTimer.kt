@@ -3,21 +3,41 @@ package io.github.mohamedisoliman.flow.ui.screens.timer
 import android.text.format.DateUtils
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.IconToggleButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.mohamedisoliman.flow.R
 import io.github.mohamedisoliman.flow.fake.tasks
-import io.github.mohamedisoliman.flow.ui.*
+import io.github.mohamedisoliman.flow.ui.ProjectView
+import io.github.mohamedisoliman.flow.ui.TagStyle
+import io.github.mohamedisoliman.flow.ui.TagView
 import io.github.mohamedisoliman.flow.ui.screens.home.Task
 import io.github.mohamedisoliman.flow.ui.screens.home.TaskTag
 import io.github.mohamedisoliman.flow.ui.theme.Figma
@@ -25,7 +45,6 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 
 const val interval = 1000
 
-@OptIn(ObsoleteCoroutinesApi::class)
 @Preview(showBackground = true)
 @Composable
 fun PreviewTaskTimer() {
@@ -34,9 +53,13 @@ fun PreviewTaskTimer() {
 
 @ObsoleteCoroutinesApi
 @Composable
-fun TaskTimer(taskId: Int?) {
+fun TaskTimer(
+    modifier: Modifier = Modifier, taskId: Int?
+) {
     val task = tasks.firstOrNull { it.id == taskId }
-    TimerContainer(task = task)
+    TimerContainer(modifier = modifier.semantics {
+        contentDescription = task?.name ?: ""
+    }, task = task)
 }
 
 @ObsoleteCoroutinesApi
@@ -47,7 +70,7 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 
     val targetTime = 60L * 3
     val lastPause = 60L * 2
-    val tick = remember { mutableStateOf(lastPause) }
+    val tick = remember { mutableLongStateOf(lastPause) }
 
     startTimer(targetTime, lastPause) {
         tick.value = it
@@ -59,7 +82,8 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
 
         TimerHeader(tag)
 
-        Column(modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -67,8 +91,7 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
             if (task != null) {
                 Text(text = task.name, style = MaterialTheme.typography.h5)
                 ProjectView(
-                    projectName = task.project.name,
-                    projectTint = task.project.color
+                    projectName = task.project.name, projectTint = task.project.color
                 )
             }
 
@@ -90,9 +113,7 @@ fun TimerContainer(modifier: Modifier = Modifier, task: Task?) {
             }
         }
 
-
     }
-
 
 }
 
@@ -119,8 +140,7 @@ private fun TimerCountdownContainer(
             currentTimeInSeconds = lastPause
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             text = tick.value.formatDuration(),
             style = MaterialTheme.typography.h4.copy(fontWeight = FontWeight.Medium)
         )
@@ -134,17 +154,18 @@ private fun TimerHeader(tag: TaskTag?) {
     val pinned = remember { mutableStateOf(false) }
 
 
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp),
+    Row(
+        modifier = Modifier.semantics {
+            contentDescription = tag?.name ?: ""
+        }
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         tag?.let {
             TagView(
-                tagName = it.name,
-                tagColor = it.color,
-                tagStyle = TagStyle.Bordered
+                tagName = it.name, tagColor = it.color, tagStyle = TagStyle.Bordered
             )
         }
 
@@ -157,7 +178,8 @@ private fun TimerHeader(tag: TaskTag?) {
 @Composable
 private fun CircleButton(
     modifier: Modifier = Modifier,
-    @DrawableRes id: Int,
+    @DrawableRes
+    id: Int,
     onClick: () -> Unit = {},
 ) {
 
@@ -165,12 +187,10 @@ private fun CircleButton(
         modifier = modifier
             .clip(CircleShape)
             .background(color = MaterialTheme.colors.surface)
-            .size(60.dp),
-        onClick = onClick
+            .size(60.dp), onClick = onClick
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = id),
-            contentDescription = ""
+            imageVector = ImageVector.vectorResource(id = id), contentDescription = ""
         )
     }
 }
@@ -190,10 +210,7 @@ fun CountDownCircle(
 
     val progress = continuousAnimation(currentTimeInSeconds, targetTimeInSeconds) //start
     CircularCountDown(
-        modifier = modifier,
-        progress = progress.value,
-        color = Figma.Purple,
-        strokeWidth = 20.dp
+        modifier = modifier, progress = progress.value, color = Figma.Purple, strokeWidth = 20.dp
     )
 }
 
@@ -204,7 +221,8 @@ private fun PinToggle(
     onChecked: (Boolean) -> Unit = {},
 ) {
     IconToggleButton(
-        checked = checked, onCheckedChange = onChecked) {
+        checked = checked, onCheckedChange = onChecked
+    ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = if (checked) R.drawable.pin_filled else R.drawable.pin_outlined),
             contentDescription = ""

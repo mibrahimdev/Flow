@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,7 +88,7 @@ fun HomeScreen(
             })
         }
 
-        tasks.take(50).forEach {
+        tasks.take(10).forEach {
             item {
                 TaskCard(task = it, onTaskClicked = onTaskClicked)
             }
@@ -227,7 +229,7 @@ fun CurrentTaskCard(
 ) {
     val taskSate = remember { task }
 
-    CardSurface(modifier = Modifier
+    CardSurface(modifier = Modifier.semantics { contentDescription = task.name }
         .wrapContentHeight()
         .then(modifier)
         .clickable { onClick(taskSate) }) {

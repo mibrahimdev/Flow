@@ -16,6 +16,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
@@ -37,7 +39,7 @@ fun AppNavigation(
     navController: NavHostController,
 ) {
     NavHost(
-        navController = navController, startDestination = Screen.Report.route,//TODO: testing
+        navController = navController, startDestination = Screen.Home.route,
         modifier = modifier
     ) {
         homeComposable(navController)
@@ -62,7 +64,7 @@ private fun @Composable NavGraphBuilder.taskTimer(navController: NavHostControll
         arguments = listOf(navArgument("taskId") { type = NavType.IntType })
     ) { entry ->
         val taskId = entry.arguments?.getInt("taskId")
-        TaskTimer(taskId)
+        TaskTimer(taskId = taskId)
     }
 }
 
@@ -203,28 +205,32 @@ private fun RowScope.NavigationItem(
         // Here the animation spec serves no purpose but to demonstrate in slow speed.
         animationSpec = TweenSpec(
             durationMillis = 200, easing = FastOutSlowInEasing
-        )
+        ), label = "ScaleAnimation"
     )
     val animatedColor by animateColorAsState(
         targetValue = targetColor, animationSpec = TweenSpec(
             durationMillis = 200, easing = FastOutSlowInEasing
-        )
+        ), label = "ColorAnimation"
     )
 
-    BottomNavigationItem(icon = {
-        icon(modifier = Modifier.scale(animatedScale), tint = animatedColor)
-    }, selected = selected, onClick = {
-        navController.navigate(screen.route) {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+    BottomNavigationItem(
+        modifier = Modifier.semantics {
+            contentDescription = screen.route
+        },
+        icon = {
+            icon(modifier = Modifier.scale(animatedScale), tint = animatedColor)
+        }, selected = selected, onClick = {
+            navController.navigate(screen.route) {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
             }
-            launchSingleTop = true
-            restoreState = true
         }
-    }
 
     )
 }

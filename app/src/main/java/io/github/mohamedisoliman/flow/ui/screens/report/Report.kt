@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -97,9 +99,12 @@ fun ChartLayout() {
 
 @Composable
 private fun HeaderLayout() {
+    val title = stringResource(R.string.reportScreenTitle)
+
     Text(
-        text = stringResource(R.string.reportScreenTitle),
-        style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium)
+        modifier = Modifier.semantics {
+            contentDescription = title
+        }, text = title, style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Medium)
     )
 }
 
