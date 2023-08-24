@@ -18,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import tools.fastlane.screengrab.Screengrab
-import tools.fastlane.screengrab.locale.LocaleTestRule
 
 @RunWith(AndroidJUnit4::class)
 class AppNavigationTest {
@@ -26,13 +25,10 @@ class AppNavigationTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Rule
-    @JvmField
-    val localeTestRule = LocaleTestRule()
 
     private lateinit var navController: TestNavHostController
 
-    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
 
     @Before
@@ -64,8 +60,7 @@ class AppNavigationTest {
 
         composeTestRule.onNodeWithContentDescription(taskName.name).performClick()
         composeTestRule.onNodeWithContentDescription(tag).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription(tag).assertIsDisplayed()
-        Screengrab.screenshot("Timer screen for $taskName")
+        Screengrab.screenshot(Screen.TaskTimer.route)
     }
 
 
@@ -75,6 +70,6 @@ class AppNavigationTest {
         val reportScreenTitle = context.getString(R.string.reportScreenTitle)
         composeTestRule.onNodeWithContentDescription(screen).performClick()
         composeTestRule.onNodeWithContentDescription(reportScreenTitle).assertIsDisplayed()
-        Screengrab.screenshot("Report Screen")
+        Screengrab.screenshot(Screen.Report.route)
     }
 }

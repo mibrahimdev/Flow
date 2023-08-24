@@ -35,4 +35,23 @@ platform :android do
     gradle(task: "clean assembleRelease")
     upload_to_play_store
   end
+
+
+  platform :android do
+    lane :generateScreenshots do
+      gradle(
+        task: 'assemble assembleAndroidTest'
+      )
+
+      apk_path = Dir.glob("../**/*-debug.apk").first
+      test_apk_path = Dir.glob("../**/*-debug-androidTest.apk").first
+
+      screengrab(
+        app_package_name: 'io.github.mohamedisoliman.flow',
+        app_apk_path: File.absolute_path(apk_path),
+        tests_apk_path:  File.absolute_path(test_apk_path)
+      )
+    end
+  end
+
 end
