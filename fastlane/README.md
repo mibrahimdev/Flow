@@ -39,10 +39,10 @@ Submit a new Beta Build to Crashlytics Beta
 
 Deploy a new version to the Google Play
 
-### android screenshots
+### android generateScreenshots
 
 ```sh
-[bundle exec] fastlane android screenshots
+[bundle exec] fastlane android generateScreenshots
 ```
 
 
